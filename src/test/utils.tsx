@@ -20,9 +20,9 @@ const customRender = (ui: React.ReactElement, options = {}) =>
       return (
         <ChakraProvider theme={theme}>
           <WagmiConfig client={wagmiClient}>
-            <MemoryRouter>
-              <RainbowKitProvider chains={chains}>{children}</RainbowKitProvider>
-            </MemoryRouter>
+            <RainbowKitProvider chains={chains}>
+              <MemoryRouter>{children}</MemoryRouter>
+            </RainbowKitProvider>
           </WagmiConfig>
         </ChakraProvider>
       );
