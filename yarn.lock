@@ -10096,6 +10096,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"path-parser@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "path-parser@npm:6.1.0"
+  dependencies:
+    search-params: 3.0.0
+    tslib: ^1.10.0
+  checksum: fd3a2a07280002f064b53d4c90cb2d0dec1bb53c4d779aeb68b676f70e0a7bb124a3320a570c7405ceb90fd95dc696bd29d8cf8bca66146de8931a0e74a76bf3
+  languageName: node
+  linkType: hard
+
 "path-to-regexp@npm:^6.2.0":
   version: 6.2.1
   resolution: "path-to-regexp@npm:6.2.1"
@@ -11073,6 +11083,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"search-params@npm:3.0.0":
+  version: 3.0.0
+  resolution: "search-params@npm:3.0.0"
+  checksum: 12bae077947eb4f80f3ab4561ee41be07a863d870f6bf2368f4ee93c6b0f874250808a2a23063883b025dc9a12e8ba344281225f6668d395685beba6fd847ce8
+  languageName: node
+  linkType: hard
+
 "secp256k1@npm:^4.0.1, secp256k1@npm:^4.0.2":
   version: 4.0.3
   resolution: "secp256k1@npm:4.0.3"
@@ -11436,6 +11453,7 @@ __metadata:
     husky: ^8.0.1
     jsdom: ^19.0.0
     lint-staged: ^12.5.0
+    path-parser: ^6.1.0
     prettier: ^2.6.1
     react: ^18.0.0
     react-dom: ^18.0.0
@@ -11953,7 +11971,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^1.0.0, tslib@npm:^1.8.1, tslib@npm:^1.9.0":
+"tslib@npm:^1.0.0, tslib@npm:^1.10.0, tslib@npm:^1.8.1, tslib@npm:^1.9.0":
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
   checksum: dbe628ef87f66691d5d2959b3e41b9ca0045c3ee3c7c7b906cc1e328b39f199bb1ad9e671c39025bd56122ac57dfbf7385a94843b1cc07c60a4db74795829acd

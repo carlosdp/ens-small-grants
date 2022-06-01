@@ -22,6 +22,7 @@
     "@rainbow-me/rainbowkit": "^0.2",
     "ethers": "^5",
     "framer-motion": "^6",
+    "path-parser": "^6.1.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6",
