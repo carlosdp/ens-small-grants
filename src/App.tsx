@@ -1,20 +1,11 @@
-import { Box, Text, Button } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { Routes, Route } from 'react-router-dom';
 
-import { useCreateRound } from './hooks';
-
 function Home() {
-  const { createRound } = useCreateRound();
-
-  const create = () => {
-    createRound('Round 1', 'The first ENS round');
-  };
-
   return (
     <Box width="100%" maxWidth="936px">
       <Text>Content Here</Text>
-      <Button onClick={create}>Create Round</Button>
     </Box>
   );
 }

@@ -4,7 +4,7 @@ import { functionRequest } from '../supabase';
 
 export function useCreateRound() {
   const createRound = useCallback((name: string, description?: string) => {
-    return functionRequest('create-round', {
+    return functionRequest('create_round', {
       name,
       description,
     });

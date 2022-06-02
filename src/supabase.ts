@@ -8,9 +8,9 @@ export const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const functionRequest = (name: string, data?: any) => {
-  return fetch(`${SUPABASE_URL}/functions/v1/${name}`, {
+  return fetch(`${SUPABASE_URL}/functions/v1/rpc`, {
     method: 'POST',
-    body: JSON.stringify(data),
+    body: JSON.stringify({ method: name, ...data }),
     headers: {
       authorization: `Bearer ${SUPABASE_ANON_KEY}`,
       'content-type': 'application/json',
