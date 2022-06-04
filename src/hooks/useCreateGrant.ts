@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useSigner, useAccount } from 'wagmi';
 
 import { functionRequest } from '../supabase';
@@ -22,6 +22,7 @@ const types = {
 export function useCreateGrant() {
   const { data: signer } = useSigner();
   const { data: account } = useAccount();
+  const [loading, setLoading] = useState(false);
 
   const createGrant = useCallback(
     async (roundId: number, title: string, description: string, fullText: string) => {
@@ -34,17 +35,23 @@ export function useCreateGrant() {
           fullText,
         };
 
-        // @ts-ignore
-        const signature = await signer._signTypedData(domain, types, grantData);
+        try {
+          setLoading(true);
 
-        return functionRequest('create_grant', {
-          grantData,
-          signature,
-        });
+          // @ts-ignore
+          const signature = await signer._signTypedData(domain, types, grantData);
+
+          return functionRequest('create_grant', {
+            grantData,
+            signature,
+          });
+        } finally {
+          setLoading(false);
+        }
       }
     },
     [account, signer]
   );
 
-  return { createGrant };
+  return { createGrant, loading };
 }

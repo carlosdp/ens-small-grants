@@ -1,14 +1,21 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 import { functionRequest } from '../supabase';
 
 export function useCreateRound() {
+  const [loading, setLoading] = useState();
+
   const createRound = useCallback((name: string, description?: string) => {
-    return functionRequest('create_round', {
-      name,
-      description,
-    });
+    try {
+      setLoading(true);
+      return functionRequest('create_round', {
+        name,
+        description,
+      });
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  return { createRound };
+  return { createRound, loading };
 }

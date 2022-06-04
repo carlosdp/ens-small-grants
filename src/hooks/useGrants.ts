@@ -15,16 +15,20 @@ export function useGrants(roundId: number) {
 
   useEffect(() => {
     (async () => {
-      const { data, error } = await client.from('grants').select().eq('round_id', roundId);
+      setLoading(true);
+      try {
+        const { data, error } = await client.from('grants').select().eq('round_id', roundId);
 
-      if (error) {
-        console.error(error);
+        if (error) {
+          console.error(error);
+          setLoading(false);
+          return;
+        }
+
+        setGrants(data);
+      } finally {
         setLoading(false);
-        return;
       }
-
-      setGrants(data);
-      setLoading(false);
     })();
   }, [roundId]);
 

@@ -14,16 +14,20 @@ export function useRounds() {
 
   useEffect(() => {
     (async () => {
-      const { data, error } = await client.from('rounds').select();
+      try {
+        setLoading(true);
+        const { data, error } = await client.from('rounds').select();
 
-      if (error) {
-        console.error(error);
+        if (error) {
+          console.error(error);
+          setLoading(false);
+          return;
+        }
+
+        setRounds(data);
+      } finally {
         setLoading(false);
-        return;
       }
-
-      setRounds(data);
-      setLoading(false);
     })();
   }, []);
 
