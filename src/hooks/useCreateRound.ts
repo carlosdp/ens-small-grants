@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 import { functionRequest } from '../supabase';
 
 export function useCreateRound() {
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(false);
 
   const createRound = useCallback((name: string, description?: string) => {
     try {
