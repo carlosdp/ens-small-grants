@@ -1,3 +1,4 @@
+import { BigNumber } from 'https://cdn.skypack.dev/@ethersproject/bignumber?dts';
 import { verifyTypedData } from 'https://cdn.skypack.dev/@ethersproject/wallet?dts';
 import { serve } from 'https://deno.land/std@0.131.0/http/server.ts';
 
@@ -17,6 +18,10 @@ const types = {
     { name: 'title', type: 'string' },
     { name: 'description', type: 'string' },
     { name: 'fullText', type: 'string' },
+    { name: 'proposalStart', type: 'uint256' },
+    { name: 'proposalEnd', type: 'uint256' },
+    { name: 'votingStart', type: 'uint256' },
+    { name: 'votingEnd', type: 'uint256' },
   ],
 };
 
@@ -76,6 +81,10 @@ serve(async req => {
         title: grantData.title,
         description: grantData.description,
         full_text: grantData.fullText,
+        proposal_start: BigNumber.from(grantData.proposalStart).toNumber(),
+        proposal_end: BigNumber.from(grantData.proposalEnd).toNumber(),
+        voting_start: BigNumber.from(grantData.votingStart).toNumber(),
+        voting_end: BigNumber.from(grantData.votingEnd).toNumber(),
       },
     ]);
 
