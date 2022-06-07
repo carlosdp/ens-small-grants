@@ -8,14 +8,15 @@ import GrantRoundSection, { RoundProps } from './components/GrantRoundSection';
 const mockRound: RoundProps = {
   id: '123',
   snapshotId: '1',
+  granteeAddr: '0x00000000000000',
   title: 'Round 3',
   description: null,
   proposalStart: 1_636_984_800,
   proposalEnd: 1_637_084_800,
   voteStart: 1_637_384_800,
   voteEnd: 1_637_584_800,
-  tokenAllocationAmount: BigInt(3_204_000_000_000_000_000),
-  tokenAllocationAddr: '0x00000000000000',
+  allocationTokenAmount: BigInt(3_204_000_000_000_000_000),
+  allocationTokenAddr: '0x00000000000000',
   maxWinnerCount: 1,
 };
 

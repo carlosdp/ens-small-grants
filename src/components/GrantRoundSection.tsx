@@ -24,6 +24,7 @@ const mockProposal = {
 export type RoundProps = {
   id: string;
   snapshotId: string | null;
+  granteeAddr: string;
 
   title: string;
   description: string | null;
@@ -34,8 +35,8 @@ export type RoundProps = {
   voteStart: number;
   voteEnd: number;
 
-  tokenAllocationAmount: bigint | null;
-  tokenAllocationAddr: string;
+  allocationTokenAmount: bigint | null;
+  allocationTokenAddr: string;
   maxWinnerCount: number;
 };
 
@@ -46,7 +47,7 @@ export type GrantRoundSectionProps = {
 
 function GrantRoundSection({ round, inProgress }: GrantRoundSectionProps) {
   const [expandProposals, setExpandProposals] = useState(false);
-  const allocationAmount = round.tokenAllocationAmount ? ethers.utils.formatEther(round.tokenAllocationAmount) : 0;
+  const allocationAmount = round.allocationTokenAmount ? ethers.utils.formatEther(round.allocationTokenAmount) : 0;
   // TODO: get proposals from rounds, for now stub it
   const proposals = [
     mockProposal,
