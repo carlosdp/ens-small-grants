@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 import { functionRequest } from '../supabase';
 
 export type CreateRoundArgs = {
-  name: string;
+  title: string;
   description?: string | null;
   proposalStart: Date;
   proposalEnd: Date;
@@ -21,7 +21,7 @@ export function useCreateRound() {
     try {
       setLoading(true);
       return functionRequest('create_round', {
-        name: args.name,
+        title: args.title,
         description: args.description,
         proposalStart: dateToTimestamp(args.proposalStart),
         propsalEnd: dateToTimestamp(args.proposalEnd),

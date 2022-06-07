@@ -18,10 +18,6 @@ const types = {
     { name: 'title', type: 'string' },
     { name: 'description', type: 'string' },
     { name: 'fullText', type: 'string' },
-    { name: 'proposalStart', type: 'uint256' },
-    { name: 'proposalEnd', type: 'uint256' },
-    { name: 'votingStart', type: 'uint256' },
-    { name: 'votingEnd', type: 'uint256' },
   ],
 };
 
@@ -33,9 +29,16 @@ serve(async req => {
   const { method, ...body } = await req.json();
 
   if (method === 'create_round') {
-    const { name, description } = body;
-
-    const { data, error } = await supabaseClient.from('rounds').insert([{ name, description }]);
+    const { data, error } = await supabaseClient.from('rounds').insert([
+      {
+        title: body.title,
+        description: body.description,
+        proposal_start: BigNumber.from(body.proposalStart).toNumber(),
+        proposal_end: BigNumber.from(body.proposalEnd).toNumber(),
+        voting_start: BigNumber.from(body.votingStart).toNumber(),
+        voting_end: BigNumber.from(body.votingEnd).toNumber(),
+      },
+    ]);
 
     if (error) {
       return new Response(JSON.stringify(error), {
@@ -81,10 +84,6 @@ serve(async req => {
         title: grantData.title,
         description: grantData.description,
         full_text: grantData.fullText,
-        proposal_start: BigNumber.from(grantData.proposalStart).toNumber(),
-        proposal_end: BigNumber.from(grantData.proposalEnd).toNumber(),
-        voting_start: BigNumber.from(grantData.votingStart).toNumber(),
-        voting_end: BigNumber.from(grantData.votingEnd).toNumber(),
       },
     ]);
 
