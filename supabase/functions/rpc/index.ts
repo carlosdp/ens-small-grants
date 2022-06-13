@@ -33,6 +33,10 @@ serve(async req => {
       {
         title: body.title,
         description: body.description,
+        creator: body.creator,
+        allocation_token_amount: body.allocationTokenAmount,
+        allocation_token_address: body.allocationTokenAddress,
+        max_winner_count: body.maxWinnerCount,
         proposal_start: BigNumber.from(body.proposalStart).toNumber(),
         proposal_end: BigNumber.from(body.proposalEnd).toNumber(),
         voting_start: BigNumber.from(body.votingStart).toNumber(),
