@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 
 import daoLogoSrc from './assets/dao_purple.svg';
 import GrantRoundSection from './components/GrantRoundSection';
+import { Proposal } from './components/Proposal';
 import { useRounds } from './hooks';
 import { CreateProposal } from './screens/CreateProposal';
 
@@ -69,6 +70,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/create_proposal" element={<CreateProposal />} />
+        <Route path="/proposals/:id" element={<Proposal />} />
       </Routes>
     </Box>
   );

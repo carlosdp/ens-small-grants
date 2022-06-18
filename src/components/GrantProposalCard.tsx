@@ -1,6 +1,7 @@
 import { Image, Box, Text, Button, Flex } from '@chakra-ui/react';
 import moment from 'moment';
 import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useEnsName, useEnsAvatar } from 'wagmi';
 
 import boltSrc from '../assets/bolt.svg';
@@ -12,12 +13,13 @@ export type GrantProposalCardProps = {
 };
 
 function GrantProposalCard({ proposal, inProgress }: GrantProposalCardProps) {
+  const navigate = useNavigate();
   const { data: ensName } = useEnsName({ address: proposal.proposer, chainId: 1 });
   const { data: ensAvatar } = useEnsAvatar({ addressOrName: proposal.proposer, chainId: 1 });
-  const timeSinceSubmission = moment(proposal.created_at).fromNow(); // TODO: update to calculate time
+  const timeSinceSubmission = moment(proposal.created_at).fromNow();
   const onPressGrantProposal = useCallback(() => {
-    // TODO: navigate to proposal
-  }, []);
+    navigate(`/proposals/${proposal.id}`);
+  }, [proposal, navigate]);
 
   return (
     <Flex

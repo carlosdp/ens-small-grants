@@ -15,6 +15,7 @@
     "postinstallDev": "husky install"
   },
   "dependencies": {
+    "@ant-design/icons": "^4",
     "@bundlr-network/client": "^0.7.4",
     "@chakra-ui/react": "^2.0.0",
     "@emotion/react": "^11",
