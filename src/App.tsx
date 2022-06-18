@@ -24,10 +24,10 @@ function Home() {
         <Flex flexDirection="column" gap="42px">
           <Flex flexDirection="column" gap="24px">
             <Text>
-              ENS Small Grants are small, quickly executable grants that are funded over a week-long period. Each round
-              consists of 3 days in which anyone can propose a project for funding, followed by 7 days where $ENS token
-              holders can vote for the best proposals. At the end of the voting period, the top 5 projects each get a
-              share of the rounds funding pool.
+              ENS Small Grants are small, quickly executable grants that are funded over a short period. Each round
+              consists of a few days in which anyone can propose a project for funding, followed by a few days where
+              $ENS token holders can vote for the best proposals. At the end of the voting period, the top voted
+              projects each get a share of the rounds funding pool.
             </Text>
           </Flex>
 
