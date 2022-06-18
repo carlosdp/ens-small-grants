@@ -85,6 +85,7 @@ serve(async req => {
     const { data, error: grantError } = await supabaseClient.from('grants').insert([
       {
         round_id: grantData.roundId,
+        proposer: grantData.address,
         title: grantData.title,
         description: grantData.description,
         full_text: grantData.fullText,

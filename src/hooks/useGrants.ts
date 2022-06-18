@@ -4,9 +4,15 @@ import { client } from '../supabase';
 
 export type Grant = {
   id: number;
+  proposer: string;
+  round_id: number;
   title: string;
   description: string;
   full_text: string;
+  created_at: string;
+  updated_at: string;
+  vote_count?: number | null;
+  vote_status?: boolean | null;
 };
 
 export function useGrants(roundId: number) {

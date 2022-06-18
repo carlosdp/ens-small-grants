@@ -23,9 +23,11 @@
     "@supabase/supabase-js": "^1.35.3",
     "ethers": "^5",
     "framer-motion": "^6",
+    "moment": "^2.29.3",
     "path-parser": "^6.1.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "react-hook-form": "^7.32.1",
     "react-router-dom": "^6",
     "wagmi": "^0.4"
   },

@@ -9654,6 +9654,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"moment@npm:^2.29.3":
+  version: 2.29.3
+  resolution: "moment@npm:2.29.3"
+  checksum: 2e780e36d9a1823c08a1b6313cbb08bd01ecbb2a9062095820a34f42c878991ccba53abaa6abb103fd5c01e763724f295162a8c50b7e95b4f1c992ef0772d3f0
+  languageName: node
+  linkType: hard
+
 "mrmime@npm:^1.0.0":
   version: 1.0.0
   resolution: "mrmime@npm:1.0.0"
@@ -10599,6 +10606,15 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 4dbc2166ac397d9e9340bd0722c6165c23f21629515f13e9cb96eaff82aa1543a2f7f3cccf15689821f19166e3a3ce59f380c43643099eb119b5f9c529b23181
+  languageName: node
+  linkType: hard
+
+"react-hook-form@npm:^7.32.1":
+  version: 7.32.1
+  resolution: "react-hook-form@npm:7.32.1"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18
+  checksum: de318ccb608eb9a4d5475ca7b7069dee16a5c2bc99e12a943e760f6739832305a4d71727a53c9fc47d821aec16615afc8a7ea74d2cc5c9fa88398e320cf9ccce
   languageName: node
   linkType: hard
 
@@ -11578,10 +11594,12 @@ __metadata:
     husky: ^8.0.1
     jsdom: ^19.0.0
     lint-staged: ^12.5.0
+    moment: ^2.29.3
     path-parser: ^6.1.0
     prettier: ^2.6.1
     react: ^18.0.0
     react-dom: ^18.0.0
+    react-hook-form: ^7.32.1
     react-router-dom: ^6
     typescript: ^4.6.3
     vite: ^2.9.9
