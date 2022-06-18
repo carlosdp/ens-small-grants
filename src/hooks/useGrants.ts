@@ -23,7 +23,7 @@ export function useGrants(roundId: number) {
     (async () => {
       setLoading(true);
       try {
-        const { data, error } = await client.from('grants').select().eq('round_id', roundId);
+        const { data, error } = await client.from('grants').select().eq('round_id', roundId).eq('deleted', false);
 
         if (error) {
           console.error(error);

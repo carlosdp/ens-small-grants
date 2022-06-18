@@ -5,6 +5,7 @@ create table grants (
   title text not null,
   description text not null,
   full_text text not null,
+  deleted boolean not null default false,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );

@@ -7,37 +7,20 @@ import boltSrc from '../assets/bolt.svg';
 import checkmarkWhiteSrc from '../assets/checkmark_white.svg';
 import proposalSrc from '../assets/proposal.svg';
 import { useGrants } from '../hooks';
+import { Round } from '../hooks';
 import GrantProposalCard from './GrantProposalCard';
 import ProgressBar from './ProgressBar';
 
-// TODO: replace with proposal props from hook
-export type RoundProps = {
-  id: string;
-  snapshotId: string | null;
-  granteeAddr: string;
-
-  title: string;
-  description: string | null;
-
-  proposalStart: number;
-  proposalEnd: number;
-
-  voteStart: number;
-  voteEnd: number;
-
-  allocationTokenAmount: bigint | null;
-  allocationTokenAddr: string;
-  maxWinnerCount: number;
-};
-
 export type GrantRoundSectionProps = {
-  round: RoundProps;
+  round: Round;
   inProgress?: boolean;
 };
 
 function GrantRoundSection({ round, inProgress }: GrantRoundSectionProps) {
   const [expandProposals, setExpandProposals] = useState(false);
-  const allocationAmount = round.allocationTokenAmount ? ethers.utils.formatEther(round.allocationTokenAmount) : 0;
+  const allocationAmount = round.allocation_token_amount
+    ? ethers.utils.formatEther(round.allocation_token_amount)
+    : '0';
   const { grants, loading } = useGrants(1);
   const navigate = useNavigate();
 
@@ -96,7 +79,7 @@ function GrantRoundSection({ round, inProgress }: GrantRoundSectionProps) {
           <Text marginEnd="6px" fontSize="sm" fontWeight="bold">
             {allocationAmount}Ξ
           </Text>
-          <Text fontSize="sm"> for a max of {round.maxWinnerCount} voted projects</Text>
+          <Text fontSize="sm"> for the top {round.max_winner_count} voted projects</Text>
         </Flex>
 
         {inProgress ? (
