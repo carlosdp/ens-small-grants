@@ -7,7 +7,7 @@ import { useGrant } from '../hooks';
 
 export function Proposal() {
   const { id } = useParams<{ id: string }>();
-  const { grant, loading } = useGrant(id);
+  const { grant, loading } = useGrant(id || '');
   const { data: ensName } = useEnsName({ address: grant?.proposer, chainId: 1 });
   const { data: ensAvatar } = useEnsAvatar({ addressOrName: grant?.proposer, chainId: 1 });
 
