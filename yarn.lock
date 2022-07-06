@@ -4710,6 +4710,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"arconnect@npm:^0.4.2":
+  version: 0.4.2
+  resolution: "arconnect@npm:0.4.2"
+  dependencies:
+    arweave: ^1.10.13
+  checksum: 5b2f262a93a3a25d4bd6f72eb3afe4b13d0e94ed12f88b7bcf3501d25839e74c2882fa1a1a9b527ac9c6da22ca2f407c07fc49e3d898a4f24b5d66a1901173f8
+  languageName: node
+  linkType: hard
+
 "are-we-there-yet@npm:^3.0.0":
   version: 3.0.0
   resolution: "are-we-there-yet@npm:3.0.0"
@@ -4843,6 +4852,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"arweave@npm:^1.11.4":
+  version: 1.11.4
+  resolution: "arweave@npm:1.11.4"
+  dependencies:
+    arconnect: ^0.4.2
+    asn1.js: ^5.4.1
+    axios: ^0.27.2
+    base64-js: ^1.5.1
+    bignumber.js: ^9.0.2
+    util: ^0.12.4
+  checksum: 1034c1287364de0495a9b0cda5d9bc9e3e9becdea3f45d072411fcbbd80dc918875d8fc0a535bdbfb4437e6e9d0158c0dcd2815856ab7357499c1984decd6cb9
+  languageName: node
+  linkType: hard
+
 "asn1.js@npm:^5.4.1":
   version: 5.4.1
   resolution: "asn1.js@npm:5.4.1"
@@ -4955,6 +4978,16 @@ __metadata:
   dependencies:
     follow-redirects: ^1.14.7
   checksum: 2a8a3787c05f2a0c9c3878f49782357e2a9f38945b93018fb0c4fd788171c43dceefbb577988628e09fea53952744d1ecebde234b561f1e703aa43e0a598a3ad
+  languageName: node
+  linkType: hard
+
+"axios@npm:^0.27.2":
+  version: 0.27.2
+  resolution: "axios@npm:0.27.2"
+  dependencies:
+    follow-redirects: ^1.14.9
+    form-data: ^4.0.0
+  checksum: 38cb7540465fe8c4102850c4368053c21683af85c5fdf0ea619f9628abbcb59415d1e22ebc8a6390d2bbc9b58a9806c874f139767389c862ec9b772235f06854
   languageName: node
   linkType: hard
 
@@ -5079,7 +5112,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"base64-js@npm:^1.3.1":
+"base64-js@npm:^1.3.1, base64-js@npm:^1.5.1":
   version: 1.5.1
   resolution: "base64-js@npm:1.5.1"
   checksum: 669632eb3745404c2f822a18fc3a0122d2f9a7a13f7fb8b5823ee19d1d2ff9ee5b52c53367176ea4ad093c332fd5ab4bd0ebae5a8e27917a4105a4cfc86b1005
@@ -5124,7 +5157,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bignumber.js@npm:^9.0.0, bignumber.js@npm:^9.0.1":
+"bignumber.js@npm:^9.0.0, bignumber.js@npm:^9.0.1, bignumber.js@npm:^9.0.2":
   version: 9.0.2
   resolution: "bignumber.js@npm:9.0.2"
   checksum: 8637b71d0a99104b20413c47578953970006fec6b4df796b9dcfd9835ea9c402ea0e727eba9a5ca9f9a393c1d88b6168c5bbe0887598b708d4f8b4870ad62e1f
@@ -7903,6 +7936,16 @@ __metadata:
     debug:
       optional: true
   checksum: eaec81c3e0ae57aae2422e38ad3539d0e7279b3a63f9681eeea319bb683dea67502c4e097136b8ce9721542b4e236e092b6b49e34e326cdd7733c274f0a3f378
+  languageName: node
+  linkType: hard
+
+"follow-redirects@npm:^1.14.9":
+  version: 1.15.1
+  resolution: "follow-redirects@npm:1.15.1"
+  peerDependenciesMeta:
+    debug:
+      optional: true
+  checksum: 6aa4e3e3cdfa3b9314801a1cd192ba756a53479d9d8cca65bf4db3a3e8834e62139245cd2f9566147c8dfe2efff1700d3e6aefd103de4004a7b99985e71dd533
   languageName: node
   linkType: hard
 
@@ -11637,6 +11680,7 @@ __metadata:
     "@typescript-eslint/parser": ^5.17.0
     "@vitejs/plugin-react": ^1.3.0
     "@vitest/ui": ^0.12.9
+    arweave: ^1.11.4
     eslint: ^8.12.0
     eslint-config-prettier: ^8.5.0
     eslint-config-react-app: ^7.0.0
