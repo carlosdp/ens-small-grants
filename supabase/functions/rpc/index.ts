@@ -20,6 +20,8 @@ const types = {
     { name: 'description', type: 'string' },
     { name: 'fullText', type: 'string' },
   ],
+};
+const snapshotTypes = {
   CreateSnapshotRequest: [{ name: 'roundId', type: 'uint256' }],
 };
 
@@ -124,7 +126,7 @@ serve(async req => {
     case 'create_snapshot': {
       const { data, signature } = body;
 
-      const recoveredAddress = verifyTypedData(domain, types, data, signature);
+      const recoveredAddress = verifyTypedData(domain, snapshotTypes, data, signature);
 
       if (!adminAddresses.has(recoveredAddress.toLowerCase())) {
         return new Response('not authorized', { status: 401, headers: { ...corsHeaders } });
