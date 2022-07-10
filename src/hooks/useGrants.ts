@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { useState, useEffect } from 'react';
 
 import { client } from '../supabase';
@@ -9,8 +10,8 @@ export type Grant = {
   title: string;
   description: string;
   full_text: string;
-  created_at: string;
-  updated_at: string;
+  created_at: moment.Moment;
+  updated_at: moment.Moment;
   vote_count?: number | null;
   vote_status?: boolean | null;
 };
@@ -31,7 +32,13 @@ export function useGrants(roundId: number) {
           return;
         }
 
-        setGrants(data);
+        setGrants(
+          data.map(p => ({
+            ...p,
+            created_at: moment(p.created_at),
+            updated_at: moment(p.updated_at),
+          }))
+        );
       } finally {
         setLoading(false);
       }
