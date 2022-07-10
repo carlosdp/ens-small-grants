@@ -1,22 +1,16 @@
-import { Box, Text, Image, Flex, Center, Spinner, Button } from '@chakra-ui/react';
+import { Box, Text, Image, Flex, Center, Spinner } from '@chakra-ui/react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useCallback } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import daoLogoSrc from './assets/dao_purple.svg';
 import GrantRoundSection from './components/GrantRoundSection';
 import { Proposal } from './components/Proposal';
-import { useRounds, useCreateSnapshot } from './hooks';
+import { useRounds } from './hooks';
 import { CreateProposal } from './screens/CreateProposal';
+import { CreateSnapshot } from './screens/CreateSnapshot';
 
 function Home() {
   const { rounds, loading } = useRounds();
-  const { createSnapshot } = useCreateSnapshot();
-
-  const create = useCallback(() => {
-    createSnapshot({ roundId: 1 });
-  }, [createSnapshot]);
-
   if (loading || !rounds || rounds.length === 0) {
     return (
       <Center>
@@ -30,7 +24,6 @@ function Home() {
       <Box width="100%" maxWidth="936px" paddingBottom="100px">
         <Flex flexDirection="column" gap="42px">
           <Flex flexDirection="column" gap="24px">
-            <Button onClick={create}>Create Snapshot</Button>
             <Text>
               ENS Small Grants are small, quickly executable grants that are funded over a short period. Each round
               consists of a few days in which anyone can propose a project for funding, followed by a few days where
@@ -78,6 +71,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/create_proposal" element={<CreateProposal />} />
         <Route path="/proposals/:id" element={<Proposal />} />
+        <Route path="/rounds/:id/snapshot" element={<CreateSnapshot />} />
       </Routes>
     </Box>
   );
