@@ -3,6 +3,8 @@ create table rounds (
   creator varchar not null,
   title text not null,
   description text,
+  snapshot_space_id varchar not null,
+  snapshot_proposal_id varchar,
   proposal_start timestamptz not null,
   proposal_end timestamptz not null,
   voting_start timestamptz not null,

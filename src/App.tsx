@@ -32,7 +32,7 @@ function Home() {
             </Text>
           </Flex>
 
-          <GrantRoundSection round={rounds[0]} inProgress />
+          <GrantRoundSection round={rounds[0]} />
 
           {rounds && rounds.length > 1 && (
             <>

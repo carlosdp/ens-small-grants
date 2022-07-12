@@ -1,5 +1,6 @@
 import { Image, Text, Box, Button, Flex, Collapse, Spinner, Center } from '@chakra-ui/react';
 import { ethers } from 'ethers';
+import moment from 'moment';
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,15 +12,29 @@ import { Round } from '../hooks';
 import GrantProposalCard from './GrantProposalCard';
 import ProgressBar from './ProgressBar';
 
-export type GrantRoundSectionProps = {
-  round: Round;
-  inProgress?: boolean;
+const roundProgress = (round: Round) => {
+  const now = moment();
+  if (round.proposal_start > now) {
+    return 0;
+  } else if (round.proposal_end > now) {
+    return 30;
+  } else if (round.voting_start > now) {
+    return 50;
+  } else if (round.voting_end > now) {
+    return 70;
+  } else {
+    return 100;
+  }
 };
 
-function GrantRoundSection({ round, inProgress }: GrantRoundSectionProps) {
+export type GrantRoundSectionProps = {
+  round: Round;
+};
+
+function GrantRoundSection({ round }: GrantRoundSectionProps) {
   const [expandProposals, setExpandProposals] = useState(false);
   const allocationAmount = round.allocation_token_amount
-    ? ethers.utils.formatEther(round.allocation_token_amount)
+    ? ethers.utils.formatEther(round.allocation_token_amount.div(round.max_winner_count))
     : '0';
   const { grants, loading } = useGrants(1);
   const navigate = useNavigate();
@@ -31,6 +46,10 @@ function GrantRoundSection({ round, inProgress }: GrantRoundSectionProps) {
   const onToggleExpandProposals = useCallback(() => {
     setExpandProposals(!expandProposals);
   }, [expandProposals]);
+
+  const now = moment();
+  const inProgress = round.proposal_start < now && round.voting_end > now;
+  const proposalsOpen = round.proposal_start < now && round.proposal_end > now;
 
   const proposalsSection = loading ? (
     <Center minHeight="250px">
@@ -44,7 +63,7 @@ function GrantRoundSection({ round, inProgress }: GrantRoundSectionProps) {
         </Flex>
       </Collapse>
 
-      {inProgress && (!grants || grants.length === 0) && (
+      {inProgress && proposalsOpen && (!grants || grants.length === 0) && (
         <Flex alignItems="center" flexDirection="column" gap="24px">
           <Image height="161px" src={proposalSrc} />
           <Text>Be the first to add a proposal</Text>
@@ -79,11 +98,11 @@ function GrantRoundSection({ round, inProgress }: GrantRoundSectionProps) {
           <Text marginEnd="6px" fontSize="sm" fontWeight="bold">
             {allocationAmount}Ξ
           </Text>
-          <Text fontSize="sm"> for the top {round.max_winner_count} voted projects</Text>
+          <Text fontSize="sm"> for each of the top {round.max_winner_count} voted projects</Text>
         </Flex>
 
         {inProgress ? (
-          <Button onClick={onPressSubmitProposal}>Submit Proposal</Button>
+          <>{proposalsOpen && <Button onClick={onPressSubmitProposal}>Submit Proposal</Button>}</>
         ) : (
           <Button onClick={onToggleExpandProposals} variant="link">
             {expandProposals ? 'Show less' : 'Show proposals'}
@@ -93,15 +112,25 @@ function GrantRoundSection({ round, inProgress }: GrantRoundSectionProps) {
 
       {inProgress ? (
         <Box width="100%" paddingTop="42px">
-          <ProgressBar progressNumber={368.81} totalNumber={958} />
+          <ProgressBar progressNumber={roundProgress(round)} totalNumber={100} />
+          <Box justifyContent="space-between" flexDirection="row" display="flex">
+            <Box>
+              <Text>Proposals Open</Text>
+            </Box>
+            <Box>
+              <Text>Voting Open</Text>
+            </Box>
+            <Box>
+              <Text>Voting Closed</Text>
+            </Box>
+          </Box>
         </Box>
       ) : (
         <Flex gap="6px" paddingTop="16px">
           <Text fontSize="sm" fontWeight="bold">
-            Issued
+            Voting Ended
           </Text>
-          {/* TODO: put in real date */}
-          <Text fontSize="sm">May 10</Text>
+          <Text fontSize="sm">{round.voting_end.format('MMMM D, YYYY')}</Text>
         </Flex>
       )}
 

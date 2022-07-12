@@ -75,7 +75,7 @@ export function useCreateSnapshot() {
             signer as unknown as ethers.providers.Web3Provider,
             account.address || '',
             {
-              space: 'test.small-grants.eth',
+              space: round.snapshot_space_id,
               type: 'single-choice',
               title: round.title,
               body: `https://arweave.net/${transaction.id}`,
