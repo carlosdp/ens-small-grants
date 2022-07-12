@@ -11,10 +11,18 @@ import { CreateSnapshot } from './screens/CreateSnapshot';
 
 function Home() {
   const { rounds, loading } = useRounds();
-  if (loading || !rounds || rounds.length === 0) {
+  if (loading || !rounds) {
     return (
       <Center>
         <Spinner />
+      </Center>
+    );
+  }
+
+  if (rounds.length === 0) {
+    return (
+      <Center>
+        <Text>No rounds created yet...</Text>
       </Center>
     );
   }

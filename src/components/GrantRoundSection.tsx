@@ -48,6 +48,7 @@ function GrantRoundSection({ round }: GrantRoundSectionProps) {
   }, [expandProposals]);
 
   const now = moment();
+  const beforeStart = now < round.proposal_start;
   const inProgress = round.proposal_start < now && round.voting_end > now;
   const proposalsOpen = round.proposal_start < now && round.proposal_end > now;
 
@@ -70,6 +71,12 @@ function GrantRoundSection({ round }: GrantRoundSectionProps) {
           <Button onClick={onPressSubmitProposal}>Submit Proposal</Button>
         </Flex>
       )}
+      {beforeStart && (
+        <Flex alignItems="center" flexDirection="column" gap="24px">
+          <Image height="161px" src={proposalSrc} />
+          <Text>Proposals will be accepted at round start time</Text>
+        </Flex>
+      )}
     </>
   );
 
@@ -81,19 +88,23 @@ function GrantRoundSection({ round }: GrantRoundSectionProps) {
             {round.title}
           </Text>
 
-          <Box
-            alignItems="center"
-            justifyContent="center"
-            display="flex"
-            width="20px"
-            height="20px"
-            marginRight="6px"
-            marginLeft="6px"
-            background={inProgress ? 'secondary-green' : 'primary-purple'}
-            borderRadius={40}
-          >
-            {inProgress ? <Image height="12px" src={boltSrc} /> : <Image height="9px" src={checkmarkWhiteSrc} />}
-          </Box>
+          {beforeStart ? (
+            <Box width="20px" height="20px" />
+          ) : (
+            <Box
+              alignItems="center"
+              justifyContent="center"
+              display="flex"
+              width="20px"
+              height="20px"
+              marginRight="6px"
+              marginLeft="6px"
+              background={inProgress ? 'secondary-green' : 'primary-purple'}
+              borderRadius={40}
+            >
+              {inProgress ? <Image height="12px" src={boltSrc} /> : <Image height="9px" src={checkmarkWhiteSrc} />}
+            </Box>
+          )}
 
           <Text marginEnd="6px" fontSize="sm" fontWeight="bold">
             {allocationAmount}Ξ
@@ -104,9 +115,11 @@ function GrantRoundSection({ round }: GrantRoundSectionProps) {
         {inProgress ? (
           <>{proposalsOpen && <Button onClick={onPressSubmitProposal}>Submit Proposal</Button>}</>
         ) : (
-          <Button onClick={onToggleExpandProposals} variant="link">
-            {expandProposals ? 'Show less' : 'Show proposals'}
-          </Button>
+          !beforeStart && (
+            <Button onClick={onToggleExpandProposals} variant="link">
+              {expandProposals ? 'Show less' : 'Show proposals'}
+            </Button>
+          )
         )}
       </Flex>
 
@@ -125,6 +138,13 @@ function GrantRoundSection({ round }: GrantRoundSectionProps) {
             </Box>
           </Box>
         </Box>
+      ) : beforeStart ? (
+        <Flex gap="6px" paddingTop="16px">
+          <Text fontSize="sm" fontWeight="bold">
+            Proposal Period Begins
+          </Text>
+          <Text fontSize="sm">{round.proposal_start.format('MMMM D, YYYY hh:mma')}</Text>
+        </Flex>
       ) : (
         <Flex gap="6px" paddingTop="16px">
           <Text fontSize="sm" fontWeight="bold">
