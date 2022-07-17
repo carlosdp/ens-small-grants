@@ -79,7 +79,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/create_proposal" element={<CreateProposal />} />
         <Route path="/rounds/:roundId/proposals/:id" element={<Proposal />} />
-        <Route path="/rounds/:id/snapshot" element={<CreateSnapshot />} />
+        <Route path="/rounds/:roundId/snapshot" element={<CreateSnapshot />} />
       </Routes>
     </Box>
   );

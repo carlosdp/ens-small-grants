@@ -11,30 +11,32 @@ export function useRound(id: string) {
 
   useEffect(() => {
     (async () => {
-      try {
-        setLoading(true);
-        const { data, error } = await client.from('rounds').select().eq('id', id);
+      if (id) {
+        try {
+          setLoading(true);
+          const { data, error } = await client.from('rounds').select().eq('id', Number.parseInt(id));
 
-        if (error) {
-          console.error(error);
+          if (error) {
+            console.error(error);
+            setLoading(false);
+            return;
+          }
+
+          setRound(
+            data.length > 0
+              ? {
+                  ...data[0],
+                  proposal_start: moment(data[0].proposal_start),
+                  proposal_end: moment(data[0].proposal_end),
+                  voting_start: moment(data[0].voting_start),
+                  voting_end: moment(data[0].voting_end),
+                  allocation_token_amount: BigNumber.from(data[0].allocation_token_amount),
+                }
+              : null
+          );
+        } finally {
           setLoading(false);
-          return;
         }
-
-        setRound(
-          data.length > 0
-            ? {
-                ...data[0],
-                proposal_start: moment(data[0].proposal_start),
-                proposal_end: moment(data[0].proposal_end),
-                voting_start: moment(data[0].voting_start),
-                voting_end: moment(data[0].voting_end),
-                allocation_token_amount: BigNumber.from(data[0].allocation_token_amount),
-              }
-            : null
-        );
-      } finally {
-        setLoading(false);
       }
     })();
   }, [id]);

@@ -50,13 +50,14 @@ function ENSAvatarAndName({ address }: ENSAvatarAndNameProps) {
 export type GrantProposalCardProps = {
   round: Round;
   proposal: Grant;
+  votesAvailable?: number | null;
 };
 
-function VoteSection({ round, proposal }: GrantProposalCardProps) {
+function VoteSection({ round, proposal, votesAvailable }: GrantProposalCardProps) {
   const [openVoteModal, setOpenVoteModal] = useState(false);
   const { data } = useAccount();
 
-  const preVoting = moment() < round.voting_start;
+  const preVoting = moment() < round.voting_start && !!proposal.vote_status;
   const roundIsClosed = !!proposal.vote_status;
 
   // TODO: replace with getting the voter via data.address
@@ -110,11 +111,11 @@ function VoteSection({ round, proposal }: GrantProposalCardProps) {
         {!preVoting && roundIsClosed && <Text fontSize="sm">Voting is closed.</Text>}
         {!preVoting && !roundIsClosed && !data?.address && <Text fontSize="sm">Connect wallet to vote.</Text>}
 
-        {userHasVotingPower && (
+        {!preVoting && !roundIsClosed && userHasVotingPower && (
           <>
             {userVotedForCurrentProposal && <Text>🎉 You voted for this proposal</Text>}
-            <Button width="100%" onClick={onOpenVoteModal}>
-              {userVotedOnAProposal ? 'Change your vote' : 'Add your vote'}
+            <Button width="100%" disabled={!!userVotedOnAProposal} onClick={onOpenVoteModal}>
+              {userVotedOnAProposal ? 'Already Voted' : `Vote${votesAvailable ? ' (' + votesAvailable + ')' : ''}`}
             </Button>
             <VoteModal onClose={onCloseVoteModal} open={openVoteModal} proposal={proposal} />
           </>

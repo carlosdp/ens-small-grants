@@ -62,7 +62,11 @@ export function useGrant(grantId: string) {
         return currentGrant;
       }
     });
-  }, [grant, grantId, snapshotProposal]);
+  }, [grantId, snapshotProposal]);
 
-  return { grant, loading: loading || roundLoading || snapshotLoading };
+  return {
+    grant,
+    loading: loading || roundLoading || snapshotLoading,
+    votesAvailable: snapshotProposal?.votes_available,
+  };
 }

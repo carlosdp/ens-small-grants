@@ -18,6 +18,7 @@ export type SnapshotProposal = {
   scores: number[];
   scores_state: string;
   votes: SnapshotVote[];
+  votes_available?: number | null;
 };
 
 const QUERY = `
@@ -25,10 +26,18 @@ const QUERY = `
       proposal(id: $proposalId) {
         id
         title
-        space
         choices
         scores
         scores_state
+        snapshot
+        space {
+          id
+        }
+        strategies {
+          network
+          name
+          params
+        }
       }
 
       votes(first: 100, where: { proposal: $proposalId }) {
@@ -52,7 +61,7 @@ export function useSnapshotProposal(proposalId: string) {
     (async () => {
       try {
         setLoading(true);
-        const res = await fetch('https://hub.snapshot.org/grapqhl', {
+        const res = await fetch('https://hub.snapshot.org/graphql', {
           method: 'POST',
           body: JSON.stringify({ query: QUERY, variables: { proposalId } }),
           headers: {
@@ -62,12 +71,26 @@ export function useSnapshotProposal(proposalId: string) {
 
         const body = await res.json();
 
-        setProposal({ ...body.data.proposal, votes: body.data.votes });
+        let votes_available: number | null = null;
+
+        if (account && account.address) {
+          const scores = await snapshot.utils.getScores(
+            body.data.proposal.space.id,
+            body.data.proposal.strategies,
+            '1',
+            [account.address],
+            body.data.proposal.snapshot
+          );
+
+          votes_available = Math.floor(scores[0][account.address] ?? 0);
+        }
+
+        setProposal({ ...body.data.proposal, votes: body.data.votes, votes_available });
       } finally {
         setLoading(false);
       }
     })();
-  }, [proposalId]);
+  }, [proposalId, account]);
 
   const vote = useCallback(
     async (choiceId: number) => {
