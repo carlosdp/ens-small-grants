@@ -1,4 +1,5 @@
 import { verifyTypedData } from 'https://cdn.skypack.dev/@ethersproject/wallet?dts';
+import moment from 'https://cdn.skypack.dev/moment?dts';
 import { serve } from 'https://deno.land/std@0.131.0/http/server.ts';
 
 import { corsHeaders } from '../_shared/corsHeaders.ts';
@@ -119,6 +120,24 @@ serve(async req => {
 
       if (rounds.length !== 1) {
         return new Response(JSON.stringify({ message: 'could not find round' }), {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      const round = rounds[0];
+
+      const now = moment();
+
+      if (now < moment(round.proposal_start)) {
+        return new Response(JSON.stringify({ message: 'proposal period not started' }), {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      if (now > moment(round.proposal_end)) {
+        return new Response(JSON.stringify({ message: 'proposal period ended' }), {
           status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
