@@ -22,7 +22,7 @@ const types = {
 };
 
 const roundTypes = {
-  Grant: [
+  Round: [
     { name: 'address', type: 'address' },
     { name: 'title', type: 'string' },
     { name: 'description', type: 'string' },
@@ -33,6 +33,13 @@ const roundTypes = {
     { name: 'proposal_end', type: 'string' },
     { name: 'voting_start', type: 'string' },
     { name: 'voting_end', type: 'string' },
+  ],
+};
+
+const snapshotTypes = {
+  Snapshot: [
+    { name: 'roundId', type: 'uint256' },
+    { name: 'snapshotProposalId', type: 'string' },
   ],
 };
 
@@ -164,6 +171,55 @@ serve(async req => {
 
       return new Response(JSON.stringify(data), {
         status: 201,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    case 'attach_snapshot': {
+      const { snapshotData, signature } = body;
+
+      const recoveredAddress = verifyTypedData(domain, snapshotTypes, snapshotData, signature);
+
+      const address = recoveredAddress.toLowerCase();
+
+      if (!adminAddresses.has(address)) {
+        return new Response(JSON.stringify({ message: 'not an admin' }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 401,
+        });
+      }
+
+      const { data: rounds, error } = await supabaseClient.from('rounds').select().eq('id', snapshotData.roundId);
+
+      if (error) {
+        return new Response(JSON.stringify(error), {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      if (rounds.length !== 1) {
+        return new Response(JSON.stringify({ message: 'could not find round' }), {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      const round = rounds[0];
+
+      if (round.snapshot_proposal_id) {
+        return new Response(JSON.stringify({ message: 'round already has a snapshot attached' }), {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      await supabaseClient
+        .from('rounds')
+        .update({ snapshot_proposal_id: snapshotData.snapshotProposalId })
+        .eq('id', snapshotData.roundId);
+
+      return new Response(JSON.stringify({ message: 'done' }), {
+        status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
