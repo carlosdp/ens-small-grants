@@ -16,6 +16,8 @@ export type Round = {
   allocation_token_amount: BigNumber;
   allocation_token_address: string;
   max_winner_count: number;
+  snapshot_space_id: string;
+  snapshot_proposal_id?: string | null;
   created_at: string;
   updated_at: string;
 };

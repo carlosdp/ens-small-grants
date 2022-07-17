@@ -60,7 +60,8 @@ function GrantRoundSection({ round }: GrantRoundSectionProps) {
     <>
       <Collapse in={inProgress || expandProposals}>
         <Flex flexWrap="wrap" gap="24px" paddingTop="42px">
-          {grants && grants.map(g => <GrantProposalCard key={g.id} proposal={g} inProgress={inProgress} />)}
+          {grants &&
+            grants.map(g => <GrantProposalCard key={g.id} roundId={round.id} proposal={g} inProgress={inProgress} />)}
         </Flex>
       </Collapse>
 

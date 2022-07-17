@@ -1,9 +1,10 @@
 import { Image, Box, Text, Button, Flex, Spinner } from '@chakra-ui/react';
+import moment from 'moment';
 import { useCallback, useState } from 'react';
 import { useEnsName, useEnsAvatar, useAccount } from 'wagmi';
 
 import boltSrc from '../assets/bolt.svg';
-import { Grant } from '../hooks';
+import type { Grant, Round } from '../hooks';
 import VoteModal from './VoteModal';
 
 function clipAddress(address: string) {
@@ -47,16 +48,16 @@ function ENSAvatarAndName({ address }: ENSAvatarAndNameProps) {
 }
 
 export type GrantProposalCardProps = {
+  round: Round;
   proposal: Grant;
-  inProgress?: boolean;
 };
 
-function VoteSection({ proposal }: GrantProposalCardProps) {
+function VoteSection({ round, proposal }: GrantProposalCardProps) {
   const [openVoteModal, setOpenVoteModal] = useState(false);
   const { data } = useAccount();
 
-  // TODO: add check if voting ended
-  const roundIsClosed = false;
+  const preVoting = moment() < round.voting_start;
+  const roundIsClosed = !!proposal.vote_status;
 
   // TODO: replace with getting the voter via data.address
   const currentVoter = {
@@ -69,12 +70,6 @@ function VoteSection({ proposal }: GrantProposalCardProps) {
   const userHasVotingPower = data?.address && currentVoter?.votingPower > 0;
   const userVotedOnAProposal = userHasVotingPower && currentVoter.votingPower - currentVoter.remainingVotingPower > 0;
   const userVotedForCurrentProposal = userHasVotingPower && currentVoter.voteCountForGrantProposal > 0;
-
-  // TODO: Replace with real votes
-  const mockedVoters = [
-    { address: '0xEE599e7c078cAdBB7f81531322d6534F22749136', count: 123 },
-    { address: '0xEE599e7c078cAdBB7f81531322d6534F22749136', count: 123 },
-  ];
 
   const onOpenVoteModal = useCallback(() => {
     setOpenVoteModal(true);
@@ -111,8 +106,9 @@ function VoteSection({ proposal }: GrantProposalCardProps) {
         marginTop="28px"
         marginBottom="34px"
       >
-        {roundIsClosed && <Text fontSize="sm">Voting is closed.</Text>}
-        {!roundIsClosed && !data?.address && <Text fontSize="sm">Connect wallet to vote.</Text>}
+        {preVoting && <Text fontSize="sm">Voting has not started.</Text>}
+        {!preVoting && roundIsClosed && <Text fontSize="sm">Voting is closed.</Text>}
+        {!preVoting && !roundIsClosed && !data?.address && <Text fontSize="sm">Connect wallet to vote.</Text>}
 
         {userHasVotingPower && (
           <>
@@ -126,8 +122,8 @@ function VoteSection({ proposal }: GrantProposalCardProps) {
       </Flex>
 
       <Flex flexDirection="column" gap="16px">
-        {mockedVoters.map(voter => (
-          <ENSAvatarAndName key={voter.address} address={voter.address} />
+        {proposal.vote_samples?.map(voter => (
+          <ENSAvatarAndName key={voter.id} address={voter.id} />
         ))}
       </Flex>
     </Flex>

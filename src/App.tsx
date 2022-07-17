@@ -78,7 +78,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/create_proposal" element={<CreateProposal />} />
-        <Route path="/proposals/:id" element={<Proposal />} />
+        <Route path="/rounds/:roundId/proposals/:id" element={<Proposal />} />
         <Route path="/rounds/:id/snapshot" element={<CreateSnapshot />} />
       </Routes>
     </Box>

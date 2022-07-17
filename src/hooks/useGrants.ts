@@ -2,6 +2,7 @@ import moment from 'moment';
 import { useState, useEffect } from 'react';
 
 import { client } from '../supabase';
+import type { SnapshotVote } from './useSnapshotProposal';
 
 export type Grant = {
   id: number;
@@ -14,6 +15,7 @@ export type Grant = {
   updated_at: moment.Moment;
   vote_count?: number | null;
   vote_status?: boolean | null;
+  vote_samples?: SnapshotVote[];
 };
 
 export function useGrants(roundId: number) {
