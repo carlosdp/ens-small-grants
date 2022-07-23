@@ -52,10 +52,16 @@ export type GrantProposalCardProps = {
   proposal: Grant;
 };
 
-function VoteInProgressSection({ round, proposal }: GrantProposalCardProps) {
+export type VoteInProgressSectionProps = {
+  round: Round;
+  snapshotProposalId: string;
+  proposal: Grant;
+};
+
+function VoteInProgressSection({ round, snapshotProposalId, proposal }: VoteInProgressSectionProps) {
   const [openVoteModal, setOpenVoteModal] = useState(false);
   const { data } = useAccount();
-  const { snapshotGrant, loading } = useSnapshotGrant(round.snapshot_proposal_id, proposal.id);
+  const { snapshotGrant, loading } = useSnapshotGrant(snapshotProposalId, proposal.id.toString());
 
   const onOpenVoteModal = useCallback(() => {
     setOpenVoteModal(true);
@@ -181,7 +187,7 @@ function VoteSection({ round, proposal }: GrantProposalCardProps) {
   let innerContent = null;
 
   innerContent = round.snapshot_proposal_id ? (
-    <VoteInProgressSection round={round} proposal={proposal} />
+    <VoteInProgressSection round={round} snapshotProposalId={round.snapshot_proposal_id} proposal={proposal} />
   ) : (
     <VotePendingSection />
   );
