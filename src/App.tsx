@@ -44,9 +44,9 @@ function Home() {
             </Text>
             {isActiveRound && (
               <Text>
-                {rounds && rounds[0].title} is open for proposals through{' '}
-                {moment(rounds[0].proposal_end).format('MMMM Do')}, with voting starting immediately after and lasting
-                until {moment(rounds[0].voting_end).format('MMMM Do')}.
+                Proposals are open through <strong>{moment(rounds[0].proposal_end).format('MMMM Do LT')}</strong>.
+                Voting starts immediately after and is open until{' '}
+                <strong>{moment(rounds[0].voting_end).format('MMMM Do LT')}</strong>.
               </Text>
             )}
           </Flex>
