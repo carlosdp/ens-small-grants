@@ -7,6 +7,7 @@ export type SnapshotGrant = {
   voteStatus: boolean;
   voteSamples: SnapshotVote[];
   votesAvailable?: number | null;
+  currentVote?: SnapshotVote | null;
 };
 
 export function useSnapshotGrant(snapshotProposalId: string, grantId: string) {
@@ -35,6 +36,7 @@ export function useSnapshotGrant(snapshotProposalId: string, grantId: string) {
         voteStatus: snapshotProposal.scores_state === 'final',
         voteSamples: votes,
         votesAvailable: snapshotProposal.votes_available,
+        currentVote: snapshotProposal.current_vote,
       });
     }
   }, [snapshotProposal, grantId]);
