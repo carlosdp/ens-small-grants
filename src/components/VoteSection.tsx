@@ -83,9 +83,9 @@ function VoteInProgressSection({ round, snapshotProposalId, proposal }: VoteInPr
     const currentVoter = {
       voterAddr: data?.address,
       grantProposalId: proposal.id,
-      voteCountForGrantProposal: snapshotGrant.currentVote?.vp ?? 0, // this will be > 0 if they voted for this proposal
+      voteCountForGrantProposal: snapshotGrant.currentVotes, // this will be > 0 if they voted for this proposal
       votingPower: snapshotGrant.votesAvailable ?? 0,
-      remainingVotingPower: snapshotGrant.currentVote ? 0 : snapshotGrant.votesAvailable ?? 0, // this will be 0 if they voted on another proposal
+      remainingVotingPower: snapshotGrant.votesAvailable ?? 0, // this will be 0 if they voted on another proposal
     };
     const userHasVotingPower = data?.address && currentVoter?.votingPower > 0;
     const userVotedOnAProposal = userHasVotingPower && currentVoter.votingPower - currentVoter.remainingVotingPower > 0;
