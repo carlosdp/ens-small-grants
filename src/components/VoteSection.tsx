@@ -139,8 +139,8 @@ function VoteInProgressSection({ round, snapshotProposalId, proposal }: VoteInPr
         </Flex>
 
         <Flex flexDirection="column" gap="16px">
-          {snapshotGrant.voteSamples.map(voter => (
-            <ENSAvatarAndName key={voter.id} address={voter.id} />
+          {snapshotGrant.voteSamples.map(v => (
+            <ENSAvatarAndName key={v.id} address={v.voter} />
           ))}
         </Flex>
       </>
