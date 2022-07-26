@@ -100,7 +100,7 @@ function VoteInProgressSection({ round, snapshotProposalId, proposal }: VoteInPr
       remainingVotingPower: snapshotGrant.votesAvailable ?? 0, // this will be 0 if they voted on another proposal
     };
     const userHasVotingPower = data?.address && currentVoter?.votingPower > 0;
-    const userVotedOnAProposal = userHasVotingPower && currentVoter.votingPower - currentVoter.remainingVotingPower > 0;
+    // const userVotedOnAProposal = userHasVotingPower && currentVoter.votingPower - currentVoter.remainingVotingPower > 0;
     const userVotedForCurrentProposal = userHasVotingPower && currentVoter.voteCountForGrantProposal > 0;
 
     innerContent = (
@@ -128,8 +128,8 @@ function VoteInProgressSection({ round, snapshotProposalId, proposal }: VoteInPr
           {!preVoting && !roundIsClosed && userHasVotingPower && (
             <>
               {userVotedForCurrentProposal && <Text>🎉 You voted for this proposal</Text>}
-              <Button width="100%" disabled={!!userVotedOnAProposal} onClick={onOpenVoteModal}>
-                {userVotedOnAProposal
+              <Button width="100%" disabled={!!userVotedForCurrentProposal} onClick={onOpenVoteModal}>
+                {userVotedForCurrentProposal
                   ? 'Already Voted'
                   : `Vote${
                       snapshotGrant.votesAvailable
