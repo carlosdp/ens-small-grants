@@ -103,7 +103,7 @@ function VoteInProgressSection({ round, snapshotProposalId, proposal }: VoteInPr
           Votes
         </Text>
         <Text fontSize="34px" fontWeight={600}>
-          {snapshotGrant.voteCount}
+          {Math.floor(snapshotGrant.voteCount)}
         </Text>
 
         <Flex
