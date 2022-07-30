@@ -79,12 +79,14 @@ export function useGrants(round: Round) {
         }
 
         setGrants(
-          data!.map(p => ({
-            ...p,
-            created_at: moment(p.created_at),
-            updated_at: moment(p.updated_at),
-            vote_count: scores[p.id],
-          }))
+          data!
+            .map(p => ({
+              ...p,
+              created_at: moment(p.created_at),
+              updated_at: moment(p.updated_at),
+              vote_count: scores[p.id],
+            }))
+            .sort((a, b) => (a.vote_count === b.vote_count ? 0 : a.vote_count < b.vote_count ? 1 : -1))
         );
       } finally {
         setLoading(false);
