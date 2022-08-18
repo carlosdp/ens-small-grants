@@ -1,13 +1,13 @@
 import { Image, Text, Box, Button, Flex, Collapse, Spinner, Center } from '@chakra-ui/react';
 import { ethers } from 'ethers';
 import moment from 'moment';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import boltSrc from '../assets/bolt.svg';
 import checkmarkWhiteSrc from '../assets/checkmark_white.svg';
 import proposalSrc from '../assets/proposal.svg';
-import { Grant, useGrants } from '../hooks';
+import { useGrants } from '../hooks';
 import { Round } from '../hooks';
 import GrantProposalCard from './GrantProposalCard';
 import ProgressBar from './ProgressBar';
@@ -33,16 +33,12 @@ export type GrantRoundSectionProps = {
 
 function GrantRoundSection({ round }: GrantRoundSectionProps) {
   const [expandProposals, setExpandProposals] = useState(false);
-  const [randomizedGrantsArray, setRandomizedGrantsArray] = useState<Grant[] | null>(null);
 
   const allocationAmount = round.allocation_token_amount
     ? ethers.utils.formatEther(round.allocation_token_amount.div(round.max_winner_count))
     : '0';
   const { grants, loading } = useGrants(round);
-
-  useEffect(() => {
-    setRandomizedGrantsArray(grants?.sort(() => Math.random() - 0.5) || null);
-  }, [grants]);
+  const randomizedGrantsArray = useMemo(() => grants?.sort(() => Math.random() - 0.5) || null, [grants]);
 
   const navigate = useNavigate();
 
