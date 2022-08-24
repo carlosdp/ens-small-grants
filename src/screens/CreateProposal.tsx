@@ -1,13 +1,13 @@
-import { Button, FieldSet, Helper, Input } from '@ensdomains/thorin';
+import { Button, FieldSet, Helper, Input, mq, Spinner, Textarea, Typography } from '@ensdomains/thorin';
 import { useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { useAccount } from 'wagmi';
 
 import BackButton from '../components/BackButton';
 import { Card } from '../components/atoms';
-import { useCreateGrant } from '../hooks';
+import { useCreateGrant, useRounds } from '../hooks';
 
 type FormInput = {
   title: string;
@@ -38,10 +38,38 @@ const ButtonContainer = styled.div(
   `
 );
 
+const Title = styled(Typography)(
+  ({ theme }) => css`
+    font-size: ${theme.fontSizes.headingThree};
+    color: ${theme.colors.textTertiary};
+    text-align: right;
+    flex-grow: 1;
+    width: 100%;
+
+    b {
+      color: ${theme.colors.text};
+      font-weight: bold;
+      display: block;
+    }
+
+    ${mq.md.min(css`
+      font-size: ${theme.space['9']};
+      text-align: left;
+      b {
+        display: inline-block;
+      }
+    `)}
+  `
+);
+
 export function CreateProposal() {
   const { roundId } = useParams<{ roundId: string }>();
+  const to = `/rounds/${roundId}`;
 
-  const { handleSubmit, register } = useForm<FormInput>();
+  const { round, isLoading } = useRounds(roundId!);
+  const { handleSubmit, register, getFieldState, formState } = useForm<FormInput>({
+    mode: 'onBlur',
+  });
   const { address } = useAccount();
   const { createGrant } = useCreateGrant();
   const navigate = useNavigate();
@@ -57,18 +85,33 @@ export function CreateProposal() {
         fullText: data.fullText,
       });
 
-      navigate('/');
+      navigate(to, { state: { submission: true } });
     },
-    [createGrant, navigate, roundId]
+    [createGrant, navigate, roundId, to]
   );
 
   const onCancel = useCallback(() => {
-    navigate('/');
-  }, [navigate]);
+    navigate(to);
+  }, [navigate, to]);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  if (!round) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <>
-      <BackButton to={`/rounds/${roundId}`} />
+      <BackButton
+        to={`/rounds/${roundId}`}
+        title={
+          <Title>
+            <b>{round.title}</b> Round {round.round}
+          </Title>
+        }
+      />
       <Container>
         {isFormDisabled && (
           <Helper alignment="horizontal" type="warning">
@@ -77,30 +120,50 @@ export function CreateProposal() {
         )}
         <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmit)}>
           <FieldSet legend="Submit a Proposal" disabled={isFormDisabled}>
-            <Input label="Title" id="title" required {...register('title', { required: true })} />
             <Input
-              label="Short Description"
-              id="shortDescription"
+              label="Title"
+              showDot
+              id="title"
+              validated={getFieldState('title', formState).isDirty}
               required
-              {...register('shortDescription', { required: true })}
+              {...register('title', { required: true })}
             />
             <Input
-              label="Full Text"
+              label="TL;DR"
+              showDot
+              id="shortDescription"
+              required
+              validated={getFieldState('shortDescription', formState).isDirty}
+              {...register('shortDescription', { required: true })}
+            />
+            <Textarea
+              label="Description"
               id="fullText"
               required
-              {...register('fullText', { required: true, minLength: 300 })}
+              showDot
+              validated={getFieldState('fullText', formState).isDirty}
+              {...register('fullText', {
+                required: true,
+                validate: value => (value.length >= 300 ? undefined : 'Please enter at least 300 characters'),
+              })}
+              error={getFieldState('fullText', formState).error?.message}
             />
             <ButtonContainer>
               <Button onClick={onCancel} disabled={isFormDisabled} variant="secondary" shadowless>
                 Cancel
               </Button>
-              <Button type="submit" disabled={isFormDisabled} shadowless>
+              <Button
+                type="submit"
+                disabled={isFormDisabled || Object.keys(formState.errors || {}).length > 0}
+                shadowless
+              >
                 Publish
               </Button>
             </ButtonContainer>
           </FieldSet>
         </form>
       </Container>
+      <div style={{ flexGrow: 1 }} />
     </>
   );
 

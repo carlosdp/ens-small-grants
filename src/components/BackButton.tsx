@@ -46,7 +46,7 @@ const Wrapper = styled.div(
 
     ${mq.md.min(css`
       padding: 0;
-      margin-top: 0;
+      margin-top: ${theme.space['8']};
     `)}
   `
 );

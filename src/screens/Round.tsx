@@ -1,6 +1,6 @@
-import { Button, mq, Spinner, Typography } from '@ensdomains/thorin';
+import { Button, Helper, mq, Spinner, Typography } from '@ensdomains/thorin';
 import { formatEther } from 'ethers/lib/utils';
-import { useHref, useLinkClickHandler, useParams } from 'react-router-dom';
+import { useHref, useLinkClickHandler, useLocation, useParams } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
 import BackButton from '../components/BackButton';
@@ -65,6 +65,7 @@ const Subtitle = styled(Typography)(
     text-align: center;
     font-size: ${theme.fontSizes.extraLarge};
     color: ${theme.colors.textTertiary};
+    width: 100%;
 
     b {
       color: ${theme.colors.indigo};
@@ -72,6 +73,7 @@ const Subtitle = styled(Typography)(
     }
 
     ${mq.md.min(css`
+      width: auto;
       text-align: left;
     `)}
   `
@@ -158,7 +160,9 @@ const NoProposalsContainer = styled.div(
     }
 
     ${mq.md.min(css`
-      text-align: right;
+      & > div:first-child {
+        text-align: left;
+      }
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
@@ -168,9 +172,12 @@ const NoProposalsContainer = styled.div(
 
 export const Round = () => {
   const { id } = useParams<{ id: string }>();
+  const { state } = useLocation();
+  const showHelper = (((state as Record<string, boolean>) || {}).submission as boolean) || false;
+
   const { round, isLoading } = useRounds(id!);
 
-  const to = '/rounds/2/proposals/create';
+  const to = `/rounds/${id}/proposals/create`;
   const href = useHref(to);
   const onClick = useLinkClickHandler(to);
 
@@ -230,6 +237,7 @@ export const Round = () => {
   return (
     <>
       <BackButton to="/" title={titleContent} />
+      {showHelper && <Helper type="info">Proposal submission recieved!</Helper>}
       <Container>
         <HeadingContainer>
           <Subtitle>

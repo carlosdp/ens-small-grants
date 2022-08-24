@@ -99,6 +99,8 @@ export function useSnapshotProposal(proposalId: string) {
       );
 
       votesAvailable = Math.floor(scores[0][address] ?? 0);
+
+      if (body.data.currentVote?.length === 0) body.data.currentVote = undefined;
     }
 
     const grants: SnapshotGrant[] =

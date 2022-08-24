@@ -2,6 +2,7 @@ import { Button, mq, Spinner, Typography } from '@ensdomains/thorin';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useCallback, useMemo, useState } from 'react';
 import styled, { css } from 'styled-components';
+import { useAccount } from 'wagmi';
 
 import { useSnapshotProposal } from '../hooks';
 import type { Grant, Round } from '../types';
@@ -90,7 +91,7 @@ const VoterAmountTypography = styled(Typography)<{ $voteCount: number }>(
 function VoteInProgressSection({ round, snapshotProposalId, proposal }: VoteInProgressSectionProps) {
   const [openVoteModal, setOpenVoteModal] = useState(false);
   const { openConnectModal } = useConnectModal();
-  const { address } = { address: '0x8e8Db5CcEF88cca9d624701Db544989C996E3216' }; // const { address } = useAccount();
+  const { address } = useAccount();
   const { proposal: snapshotProposal, vote, isLoading } = useSnapshotProposal(snapshotProposalId);
   const snapshotGrant = useMemo(
     () => snapshotProposal?.grants.find(g => g.grantId === proposal.id),

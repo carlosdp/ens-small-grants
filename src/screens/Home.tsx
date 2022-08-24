@@ -77,6 +77,7 @@ const SectionHeading = styled.div(
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
+      gap: ${theme.space['4']};
 
       padding: 0;
     `)}
