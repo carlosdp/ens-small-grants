@@ -43,7 +43,7 @@ function Profile({ address, subtitle }: { address: string; subtitle: string }) {
   });
 
   return (
-    <ProfileContainer>
+    <ProfileContainer className="profile">
       <AvatarWrapper>
         <Avatar src={ensAvatar || undefined} label={ensName || 'label'} />
       </AvatarWrapper>

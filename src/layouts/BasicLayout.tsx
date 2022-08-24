@@ -1,3 +1,4 @@
+import { mq } from '@ensdomains/thorin';
 import { ReactNode } from 'react';
 import styled, { css } from 'styled-components';
 
@@ -10,7 +11,11 @@ const BodyContainer = styled.div(
     align-items: center;
     justify-content: center;
     width: 100%;
-    padding: ${theme.space['12']};
+    padding: ${theme.space['4']};
+
+    ${mq.md.min(css`
+      padding: ${theme.space['12']};
+    `)}
   `
 );
 
@@ -21,10 +26,14 @@ const MainContent = styled.div(
     align-items: center;
     justify-content: center;
     flex-grow: 1;
-    gap: ${theme.space['8']};
+    gap: ${theme.space['4']};
 
     width: 100%;
     max-width: ${theme.space['320']};
+
+    ${mq.md.min(css`
+      gap: ${theme.space['8']};
+    `)}
   `
 );
 

@@ -1,4 +1,4 @@
-import { Button, Spinner, Typography } from '@ensdomains/thorin';
+import { Button, mq, Spinner, Typography } from '@ensdomains/thorin';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useCallback, useMemo, useState } from 'react';
 import styled, { css } from 'styled-components';
@@ -39,8 +39,14 @@ const Container = styled.div(
     align-items: flex-start;
     justify-content: center;
     gap: ${theme.space['3']};
-
     width: 100%;
+
+    .profile:nth-child(n + 4) {
+      display: none;
+      ${mq.md.min(css`
+        display: flex;
+      `)}
+    }
   `
 );
 
@@ -67,6 +73,17 @@ const ExtraVotersContainer = styled.div(
 
     height: ${theme.space['10']};
     width: 100%;
+  `
+);
+
+const VoterAmountTypography = styled(Typography)<{ $voteCount: number }>(
+  ({ $voteCount }) => css`
+    &::before {
+      content: '+ ${$voteCount - 2} ';
+      ${mq.md.min(css`
+        content: '+ ${$voteCount - 4} ';
+      `)}
+    }
   `
 );
 
@@ -155,7 +172,7 @@ function VoteInProgressSection({ round, snapshotProposalId, proposal }: VoteInPr
         ))}
         {snapshotGrant.voteSamples.length > 4 && (
           <ExtraVotersContainer>
-            <Typography>+ {snapshotGrant.voteSamples.length - 4} others</Typography>
+            <VoterAmountTypography $voteCount={snapshotGrant.voteSamples.length}>others</VoterAmountTypography>
           </ExtraVotersContainer>
         )}
       </Container>
@@ -177,6 +194,7 @@ const StyledCard = styled(Card)(
   () => css`
     width: 100%;
     height: min-content;
+    grid-area: votes;
   `
 );
 

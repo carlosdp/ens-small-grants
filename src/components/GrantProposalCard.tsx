@@ -1,11 +1,11 @@
-import { Button, Typography } from '@ensdomains/thorin';
-import { useHref, useLinkClickHandler } from 'react-router-dom';
+import { mq, Typography } from '@ensdomains/thorin';
+import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
-import { ClickHandler, Grant } from '../types';
+import { Grant } from '../types';
 import { getTimeDifferenceString, voteCountFormatter } from '../utils';
 import Profile from './Profile';
-import { Card } from './atoms';
+import { cardStyles } from './atoms';
 
 export type GrantProposalCardProps = {
   roundId: string | number;
@@ -13,11 +13,29 @@ export type GrantProposalCardProps = {
   inProgress?: boolean;
 };
 
-const StyledCard = styled(Card)(
-  () => css`
-    align-items: flex-start;
+const StyledCard = styled(Link)(
+  cardStyles,
+  ({ theme }) => css`
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      'profile votes'
+      'content content';
+    gap: ${theme.space['4']};
+    border: 1px solid ${theme.colors.borderSecondary};
+
     width: 100%;
     height: 100%;
+
+    transition: all 0.15s ease-in-out;
+    &:hover {
+      background-color: ${theme.colors.backgroundTertiary};
+    }
+
+    ${mq.md.min(css`
+      grid-template-areas: 'profile content votes';
+      grid-template-columns: ${theme.space['44']} 1fr min-content;
+    `)}
   `
 );
 
@@ -42,41 +60,67 @@ const Description = styled(Typography)(
   `
 );
 
-const VotesAndButton = styled.div(
-  () => css`
+const Votes = styled(Typography)(
+  ({ theme }) => css`
+    grid-area: votes;
+    white-space: nowrap;
+    color: ${theme.colors.textTertiary};
+    font-size: ${theme.fontSizes.extraLarge};
+    text-align: right;
+    b {
+      color: ${theme.colors.text};
+    }
+  `
+);
+
+const ProfileWrapper = styled.div(
+  ({ theme }) => css`
+    grid-area: profile;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
 
-    width: 100%;
+    width: ${theme.space['44']};
+    min-width: ${theme.space['44']};
+    padding: ${theme.space['2']};
+    border-radius: ${theme.radii.large};
+
+    background-color: ${theme.colors.backgroundTertiary};
+
+    div {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  `
+);
+
+const ContentWrapper = styled.div(
+  () => css`
+    flex-grow: 1;
+    grid-area: content;
   `
 );
 
 function GrantProposalCard({ roundId, proposal }: GrantProposalCardProps) {
   const to = `/rounds/${roundId}/proposals/${proposal.id}`;
-  const href = useHref(to);
-  const handleClick = useLinkClickHandler(to);
 
   return (
-    <StyledCard>
-      <Profile
-        address={proposal.proposer}
-        subtitle={`${getTimeDifferenceString(proposal.createdAt, new Date())} ago`}
-      />
-      <Title>{proposal.title}</Title>
-      <Description>{proposal.description}</Description>
-      <div style={{ flexGrow: 1 }} />
-      <VotesAndButton>
-        <Typography>
-          <b>{voteCountFormatter.format(proposal.voteCount!)}</b> votes
-        </Typography>
-        <div>
-          <Button size="small" shadowless as="a" href={href} onClick={handleClick as unknown as ClickHandler}>
-            View Proposal
-          </Button>
-        </div>
-      </VotesAndButton>
+    <StyledCard to={to}>
+      <ProfileWrapper>
+        <Profile
+          address={proposal.proposer}
+          subtitle={`${getTimeDifferenceString(proposal.createdAt, new Date())} ago`}
+        />
+      </ProfileWrapper>
+      <ContentWrapper>
+        <Title>{proposal.title}</Title>
+        <Description>{proposal.description}</Description>
+      </ContentWrapper>
+      <Votes>
+        <b>{voteCountFormatter.format(proposal.voteCount!)}</b> votes
+      </Votes>
     </StyledCard>
   );
 }

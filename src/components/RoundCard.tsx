@@ -1,4 +1,4 @@
-import { Button, Tag, Typography } from '@ensdomains/thorin';
+import { Button, mq, Tag, Typography } from '@ensdomains/thorin';
 import { useHref, useLinkClickHandler } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
@@ -8,7 +8,10 @@ import { Card } from './atoms';
 
 const StyledCard = styled(Card)(
   ({ theme }) => css`
-    width: ${theme.space['72']};
+    width: 100%;
+    ${mq.md.min(css`
+      width: ${theme.space['72']};
+    `)}
   `
 );
 

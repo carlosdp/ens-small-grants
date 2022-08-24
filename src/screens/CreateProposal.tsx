@@ -68,7 +68,7 @@ export function CreateProposal() {
 
   return (
     <>
-      <BackButton to="/" />
+      <BackButton to={`/rounds/${roundId}`} />
       <Container>
         {isFormDisabled && (
           <Helper alignment="horizontal" type="warning">

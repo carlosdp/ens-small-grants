@@ -1,6 +1,7 @@
 import { Heading, Spinner } from '@ensdomains/thorin';
 import styled, { css } from 'styled-components';
 
+import BackButton from '../components/BackButton';
 import RoundCard from '../components/RoundCard';
 import { useRounds } from '../hooks';
 
@@ -34,9 +35,11 @@ const Rounds = () => {
     return <Spinner />;
   }
 
+  const title = <Title>All rounds</Title>;
+
   return (
     <>
-      <Title>All rounds</Title>
+      <BackButton to="/" title={title} />
       <RoundGrid>
         {rounds
           .sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1))

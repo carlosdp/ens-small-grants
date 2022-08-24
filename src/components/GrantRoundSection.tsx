@@ -21,12 +21,14 @@ import GrantProposalCard from './GrantProposalCard';
 //   }
 // };
 
-const GrantGrid = styled.div(
+const GrantsContainer = styled.div(
   ({ theme }) => css`
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(${theme.space['72']}, 1fr));
-    grid-auto-rows: ${theme.space['64']};
-    gap: ${theme.space['8']};
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: stretch;
+    gap: ${theme.space['4']};
+
     width: 100%;
   `
 );
@@ -43,16 +45,16 @@ function GrantRoundSection({ randomiseGrants, ...round }: GrantRoundSectionProps
   }, [_grants, randomiseGrants]);
 
   if (isLoading) {
-    return <Spinner />;
+    return <Spinner size="large" />;
   }
 
   return (
-    <GrantGrid>
+    <GrantsContainer>
       {grants &&
         grants.map(g => (
           <GrantProposalCard proposal={g} roundId={round.id} inProgress={round.votingEnd > new Date()} key={g.id} />
         ))}
-    </GrantGrid>
+    </GrantsContainer>
   );
 
   // const [expandProposals, setExpandProposals] = useState(false);

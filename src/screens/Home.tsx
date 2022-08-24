@@ -1,4 +1,4 @@
-import { Spinner, Typography } from '@ensdomains/thorin';
+import { mq, Spinner, Typography } from '@ensdomains/thorin';
 import styled, { css } from 'styled-components';
 
 import Anchor from '../components/Anchor';
@@ -30,6 +30,12 @@ const HeadingContainer = styled.div(
     gap: ${theme.space['2']};
     max-width: ${theme.space['144']};
     text-align: center;
+
+    margin-top: ${theme.space['8']};
+
+    ${mq.md.min(css`
+      margin-top: 0;
+    `)}
   `
 );
 
@@ -39,9 +45,12 @@ const RoundItems = styled.div(
     flex-direction: row;
     align-items: stretch;
     justify-content: center;
+    flex-wrap: wrap;
     gap: ${theme.space['4']};
 
-    height: ${theme.space['64']};
+    ${mq.md.min(css`
+      height: ${theme.space['64']};
+    `)}
   `
 );
 
@@ -56,11 +65,21 @@ const RoundItemsOuter = styled.div(
 );
 
 const SectionHeading = styled.div(
-  () => css`
+  ({ theme }) => css`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+
+    padding: ${theme.space['2']};
+
+    ${mq.md.min(css`
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 0;
+    `)}
 
     width: 100%;
   `
@@ -70,6 +89,24 @@ const ActiveTypography = styled(Typography)(
   ({ theme }) => css`
     color: ${theme.colors.textTertiary};
     font-weight: bold;
+  `
+);
+
+const MobileHiddenAnchor = styled(Anchor)(
+  () => css`
+    display: none;
+    ${mq.md.min(css`
+      display: block;
+    `)}
+  `
+);
+
+const DesktopHiddenAnchor = styled(Anchor)(
+  () => css`
+    display: block;
+    ${mq.md.min(css`
+      display: none;
+    `)}
   `
 );
 
@@ -95,13 +132,16 @@ function Home() {
       <RoundItemsOuter>
         <SectionHeading>
           <ActiveTypography>Showing all active rounds</ActiveTypography>
-          <Anchor to="/rounds">See previous rounds</Anchor>
+          <MobileHiddenAnchor to="/rounds">See all rounds</MobileHiddenAnchor>
         </SectionHeading>
         <RoundItems>
           {activeRounds.map(r => (
             <RoundCard key={r.id} {...r} />
           ))}
         </RoundItems>
+        <SectionHeading>
+          <DesktopHiddenAnchor to="/rounds">See all rounds</DesktopHiddenAnchor>
+        </SectionHeading>
       </RoundItemsOuter>
     </>
   );

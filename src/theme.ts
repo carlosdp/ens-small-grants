@@ -1,12 +1,12 @@
-import { lightTheme as thorinLightTheme } from '@ensdomains/thorin';
+import { lightTheme as thorinLightTheme, DefaultTheme as ThorinDefaultTheme } from '@ensdomains/thorin';
 import { lightTheme, Theme } from '@rainbow-me/rainbowkit';
-import { DefaultTheme } from 'styled-components';
+import 'styled-components';
 
 type ExtendedTheme = typeof thorinLightTheme;
 
 declare module 'styled-components' {
-  // eslint-disable-next-line no-shadow
-  export type DefaultTheme = ExtendedTheme;
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  export interface DefaultTheme extends ExtendedTheme {}
 }
 
 export const rainbowKitTheme: Theme = {
@@ -19,7 +19,7 @@ export const rainbowKitTheme: Theme = {
   },
 };
 
-export const thorinTheme: DefaultTheme = {
+export const thorinTheme: ThorinDefaultTheme = {
   ...thorinLightTheme,
   colors: {
     ...thorinLightTheme.colors,
