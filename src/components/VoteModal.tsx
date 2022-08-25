@@ -1,10 +1,11 @@
-import { Button, Dialog, mq, Typography } from '@ensdomains/thorin';
+import { Button, Dialog, Typography } from '@ensdomains/thorin';
 import { useCallback, useState } from 'react';
 import styled, { css } from 'styled-components';
 
 import type { Grant } from '../types';
 import { voteCountFormatter } from '../utils';
 import DisplayItem from './DisplayItem';
+import { InnerModal, DisplayItems } from './atoms';
 
 export type VoteModalProps = {
   open: boolean;
@@ -14,34 +15,6 @@ export type VoteModalProps = {
   onVote: () => Promise<void>;
   onClose: () => void;
 };
-
-const InnerModal = styled.div(
-  ({ theme }) => css`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    width: ${theme.space.full};
-    padding: 0 ${theme.space['5']};
-    gap: ${theme.space['4']};
-    max-height: 60vh;
-    overflow-y: auto;
-    ${mq.sm.min(css`
-      min-width: ${theme.space['128']};
-    `)}
-  `
-);
-
-const DisplayItems = styled.div(
-  ({ theme }) => css`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: stretch;
-    width: ${theme.space.full};
-    gap: ${theme.space['2']};
-  `
-);
 
 const Message = styled(Typography)(
   ({ theme }) => css`

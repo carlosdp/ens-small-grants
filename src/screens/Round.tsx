@@ -191,8 +191,17 @@ export const Round = () => {
 
   let upperVoteMsg: React.ReactNode;
   let lowerVoteMsg: React.ReactNode;
+  let noSnapshotWhenNeeded = false;
 
-  if (!isActiveRound) {
+  if (!round.snapshot && (!isActiveRound || isVotingRound)) {
+    noSnapshotWhenNeeded = true;
+    upperVoteMsg = (
+      <>
+        <b>0</b> total votes
+      </>
+    );
+    lowerVoteMsg = <>Close time unknown</>;
+  } else if (!isActiveRound) {
     upperVoteMsg = (
       <>
         <b>{Intl.NumberFormat('en', { notation: 'compact' }).format(round.snapshot!.scoresTotal!)}</b> total votes
@@ -250,7 +259,11 @@ export const Round = () => {
           </VoteDetailsContainer>
         </HeadingContainer>
       </Container>
-      {isVotingRound ? (
+      {noSnapshotWhenNeeded ? (
+        <NoProposalsContainer>
+          <Typography>Looks like something went wrong, try again later.</Typography>
+        </NoProposalsContainer>
+      ) : isVotingRound ? (
         <GrantRoundSection randomiseGrants={isActiveRound && isVotingRound} {...round} />
       ) : (
         <NoProposalsContainer>

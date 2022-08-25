@@ -1,4 +1,4 @@
-import { Typography } from '@ensdomains/thorin';
+import { mq, Typography } from '@ensdomains/thorin';
 import styled, { css, DefaultTheme } from 'styled-components';
 
 export const cardStyles = ({ theme }: { theme: DefaultTheme }) => css`
@@ -23,5 +23,33 @@ export const TextWithHighlight = styled(Typography)(
     b {
       color: ${theme.colors.text};
     }
+  `
+);
+
+export const InnerModal = styled.div(
+  ({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: ${theme.space.full};
+    padding: 0 ${theme.space['5']};
+    gap: ${theme.space['4']};
+    max-height: 60vh;
+    overflow-y: auto;
+    ${mq.sm.min(css`
+      min-width: ${theme.space['128']};
+    `)}
+  `
+);
+
+export const DisplayItems = styled.div(
+  ({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: stretch;
+    width: ${theme.space.full};
+    gap: ${theme.space['2']};
   `
 );
