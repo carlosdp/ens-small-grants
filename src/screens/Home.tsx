@@ -111,7 +111,7 @@ const DesktopHiddenAnchor = styled(Anchor)(
   `
 );
 
-const isActiveRound = (round: RoundType) => round.votingEnd > new Date();
+const isActiveRound = (round: RoundType) => round.votingEnd > new Date() && round.proposalStart < new Date();
 
 function Home() {
   const { rounds, isLoading } = useRounds();
