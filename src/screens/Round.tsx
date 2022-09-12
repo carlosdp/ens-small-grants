@@ -1,9 +1,10 @@
-import { Button, Helper, mq, Spinner, Typography } from '@ensdomains/thorin';
+import { Helper, mq, Spinner, Typography } from '@ensdomains/thorin';
 import { formatEther } from 'ethers/lib/utils';
 import { useHref, useLinkClickHandler, useLocation, useParams } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
 import BackButton from '../components/BackButton';
+import { BannerContainer } from '../components/BannerContainer';
 import GrantRoundSection from '../components/GrantRoundSection';
 import { useRounds } from '../hooks';
 import { ClickHandler } from '../types';
@@ -21,7 +22,7 @@ const Container = styled.div(
 );
 
 const HeadingContainer = styled.div(
-  () => css`
+  ({ theme }) => css`
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -30,6 +31,7 @@ const HeadingContainer = styled.div(
     width: 100%;
 
     ${mq.md.min(css`
+      gap: ${theme.space['4']};
       flex-direction: row;
       height: max-content;
     `)}
@@ -132,44 +134,6 @@ const VoteTimeTypography = styled(Typography)(
   `
 );
 
-const NoProposalsContainer = styled.div(
-  ({ theme }) => css`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: ${theme.space['4']};
-
-    width: 100%;
-
-    padding: ${theme.space['8']};
-    border-radius: ${theme.radii.extraLarge};
-
-    background-color: ${theme.colors.foregroundTertiary};
-
-    & > div:first-child {
-      text-align: center;
-      & > div:first-child {
-        font-size: ${theme.fontSizes.extraLarge};
-        font-weight: bold;
-      }
-      & > div:last-child {
-        color: ${theme.colors.textSecondary};
-        font-size: ${theme.fontSizes.large};
-      }
-    }
-
-    ${mq.md.min(css`
-      & > div:first-child {
-        text-align: left;
-      }
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-    `)}
-  `
-);
-
 export const Round = () => {
   const { id } = useParams<{ id: string }>();
   const { state } = useLocation();
@@ -227,7 +191,7 @@ export const Round = () => {
         </>
       );
     } else {
-      upperVoteMsg = 'No votes so far';
+      upperVoteMsg = 'Voting closed';
       lowerVoteMsg = (
         <>
           Submissions close in <br />
@@ -262,23 +226,16 @@ export const Round = () => {
         </HeadingContainer>
       </Container>
       {noSnapshotWhenNeeded ? (
-        <NoProposalsContainer>
+        <BannerContainer>
           <Typography>Looks like something went wrong, try again later.</Typography>
-        </NoProposalsContainer>
-      ) : isVotingRound ? (
-        <GrantRoundSection randomiseGrants={isActiveRound && isVotingRound} {...round} />
+        </BannerContainer>
       ) : (
-        <NoProposalsContainer>
-          <div>
-            <Typography>No proposals here yet</Typography>
-            <Typography>You can submit your own proposal until the submissions close.</Typography>
-          </div>
-          <div>
-            <Button as="a" href={href} onClick={onClick as unknown as ClickHandler}>
-              Submit Proposal
-            </Button>
-          </div>
-        </NoProposalsContainer>
+        <GrantRoundSection
+          randomiseGrants={isActiveRound && isVotingRound}
+          createProposalHref={href}
+          createProposalClick={onClick as unknown as ClickHandler | (() => void)}
+          {...round}
+        />
       )}
       <div style={{ flexGrow: 1 }} />
     </>
