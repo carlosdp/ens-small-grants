@@ -1,4 +1,4 @@
-import { Button, Dialog, Typography } from '@ensdomains/thorin';
+import { Button, Dialog, Helper, Typography } from '@ensdomains/thorin';
 import { useCallback, useState } from 'react';
 import styled, { css } from 'styled-components';
 
@@ -26,11 +26,14 @@ const Message = styled(Typography)(
 
 function VoteModal({ open, onClose, proposal, onVote, address, votingPower }: VoteModalProps) {
   const [waiting, setWaiting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const onPressAddVote = useCallback(async () => {
     try {
       setWaiting(true);
-      await onVote();
+      await onVote().catch(error_ => {
+        setError(error_.error_description);
+      });
     } finally {
       setWaiting(false);
     }
@@ -41,6 +44,11 @@ function VoteModal({ open, onClose, proposal, onVote, address, votingPower }: Vo
       <Dialog.CloseButton onClick={onClose} />
       <Dialog.Heading title="Allocate your vote" />
       <InnerModal>
+        {error && (
+          <Helper alignment="horizontal" type="error">
+            Snapshot error: {error}
+          </Helper>
+        )}
         <Message>You are about to vote for this proposal, please confirm the details below.</Message>
         <DisplayItems>
           <DisplayItem label="Connected address" address value={address} />
