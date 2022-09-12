@@ -243,7 +243,8 @@ export const Round = () => {
     </Title>
   );
 
-  const ethPerWinner = Number(round.allocationTokenAmount) / round.maxWinnerCount;
+  const ethPerWinner = formatEther((Number(round.allocationTokenAmount) / round.maxWinnerCount).toString());
+  const ethPerWinnerStr = ethPerWinner.endsWith('.0') ? ethPerWinner.replace(/\..*/, '') : ethPerWinner;
 
   return (
     <>
@@ -252,8 +253,7 @@ export const Round = () => {
       <Container>
         <HeadingContainer>
           <Subtitle>
-            The <b>Top {round.maxWinnerCount}</b> voted proposals of this round get{' '}
-            <b>{formatEther(ethPerWinner.toString()).replace(/\..*/, '')} ETH</b> each
+            The <b>Top {round.maxWinnerCount}</b> voted proposals of this round get <b>{ethPerWinnerStr} ETH</b> each
           </Subtitle>
           <VoteDetailsContainer>
             <VotesTypography>{upperVoteMsg}</VotesTypography>
