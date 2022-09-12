@@ -64,7 +64,13 @@ function GrantRoundSection({
       </Button>
       {grants &&
         grants.map(g => (
-          <GrantProposalCard proposal={g} roundId={round.id} inProgress={round.votingEnd > new Date()} key={g.id} />
+          <GrantProposalCard
+            proposal={g}
+            roundId={round.id}
+            votingStarted={round.votingStart < new Date()}
+            inProgress={round.votingEnd > new Date()}
+            key={g.id}
+          />
         ))}
     </GrantsContainer>
   );

@@ -10,6 +10,7 @@ import { cardStyles } from './atoms';
 export type GrantProposalCardProps = {
   roundId: string | number;
   proposal: Grant;
+  votingStarted: boolean;
   inProgress?: boolean;
 };
 
@@ -103,7 +104,7 @@ const ContentWrapper = styled.div(
   `
 );
 
-function GrantProposalCard({ roundId, proposal }: GrantProposalCardProps) {
+function GrantProposalCard({ roundId, proposal, votingStarted }: GrantProposalCardProps) {
   const to = `/rounds/${roundId}/proposals/${proposal.id}`;
 
   return (
@@ -118,9 +119,11 @@ function GrantProposalCard({ roundId, proposal }: GrantProposalCardProps) {
         <Title>{proposal.title}</Title>
         <Description>{proposal.description}</Description>
       </ContentWrapper>
-      <Votes>
-        <b>{voteCountFormatter.format(proposal.voteCount!)}</b> votes
-      </Votes>
+      {votingStarted && (
+        <Votes>
+          <b>{voteCountFormatter.format(proposal.voteCount!)}</b> votes
+        </Votes>
+      )}
     </StyledCard>
   );
 }
