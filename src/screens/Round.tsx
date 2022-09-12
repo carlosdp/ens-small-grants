@@ -149,15 +149,19 @@ export const Round = () => {
     return <Spinner size="large" />;
   }
 
-  // Check if round[0] is active (in proposals or voting stage)
-  const isActiveRound = round.votingEnd > new Date();
-  const isVotingRound = round.proposalEnd < new Date();
+  const isActiveRound = round.proposalStart < new Date() && round.votingEnd > new Date();
+  const isVotingRound = round.votingStart < new Date() && round.votingEnd > new Date();
+  const isPropRound = round.proposalStart < new Date() && round.proposalEnd > new Date();
 
   let upperVoteMsg: React.ReactNode;
   let lowerVoteMsg: React.ReactNode;
   let noSnapshotWhenNeeded = false;
 
-  if (!round.snapshot && (!isActiveRound || isVotingRound)) {
+  if (isActiveRound && !isPropRound && !isVotingRound) {
+    // Time between submissions closed and voting starts
+    upperVoteMsg = <p>Voting starts in {getTimeDifferenceString(new Date(), round.votingStart)}</p>;
+    lowerVoteMsg = <p>Submissions closed</p>;
+  } else if (!round.snapshot && (!isActiveRound || isVotingRound)) {
     noSnapshotWhenNeeded = true;
     upperVoteMsg = (
       <>
@@ -191,7 +195,7 @@ export const Round = () => {
         </>
       );
     } else {
-      upperVoteMsg = 'Voting closed';
+      upperVoteMsg = 'Accepting submissions';
       lowerVoteMsg = (
         <>
           Submissions close in <br />
@@ -232,6 +236,7 @@ export const Round = () => {
       ) : (
         <GrantRoundSection
           randomiseGrants={isActiveRound && isVotingRound}
+          isPropsOpen={isPropRound}
           createProposalHref={href}
           createProposalClick={onClick as unknown as ClickHandler | (() => void)}
           {...round}

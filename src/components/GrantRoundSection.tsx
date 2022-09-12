@@ -20,12 +20,14 @@ const GrantsContainer = styled.div(
 );
 
 export type GrantRoundSectionProps = Round & {
+  isPropsOpen?: boolean;
   randomiseGrants?: boolean;
   createProposalHref?: string;
   createProposalClick?: ClickHandler;
 };
 
 function GrantRoundSection({
+  isPropsOpen,
   randomiseGrants,
   createProposalHref,
   createProposalClick,
@@ -59,9 +61,11 @@ function GrantRoundSection({
 
   return (
     <GrantsContainer>
-      <Button as="a" href={createProposalHref} onClick={createProposalClick}>
-        Submit Proposal
-      </Button>
+      {isPropsOpen && (
+        <Button as="a" href={createProposalHref} onClick={createProposalClick}>
+          Submit Proposal
+        </Button>
+      )}
       {grants &&
         grants.map(g => (
           <GrantProposalCard
