@@ -6,7 +6,7 @@ import { functionRequest } from '../supabase';
 const domain = {
   name: 'ENS Grants',
   version: '1',
-  chainId: 1,
+  chainId: 4,
 };
 
 const types = {

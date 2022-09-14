@@ -8,7 +8,7 @@ import { supabaseClient } from '../_shared/supabaseClient.ts';
 const domain = {
   name: 'ENS Grants',
   version: '1',
-  chainId: 1,
+  chainId: 4,
 };
 
 const types = {
@@ -48,6 +48,7 @@ const adminAddressList = [
   '0x9B6568d72A6f6269049Fac3998d1fadf1E6263cc',
   '0x179A862703a4adfb29896552DF9e307980D19285',
   '0x1D5460F896521aD685Ea4c3F2c679Ec0b6806359',
+  '0x779981590E7Ccc0CFAe8040Ce7151324747cDb97',
 ];
 const adminAddresses = new Set(adminAddressList.map(x => x.toLowerCase()));
 

@@ -52,7 +52,7 @@ export function useRounds(selection?: string) {
         return;
       }
 
-      const body = (await fetch('https://hub.snapshot.org/graphql', {
+      const body = (await fetch('https://testnet.snapshot.org/graphql', {
         method: 'POST',
         body: JSON.stringify({
           query: QUERY,

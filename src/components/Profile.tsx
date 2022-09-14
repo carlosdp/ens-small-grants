@@ -35,11 +35,11 @@ const TimeTypography = styled(Typography)(
 function Profile({ address, subtitle }: { address: string; subtitle: string }) {
   const { data: ensName } = useEnsName({
     address: address,
-    chainId: 1,
+    chainId: 4,
   });
   const { data: ensAvatar } = useEnsAvatar({
     addressOrName: address,
-    chainId: 1,
+    chainId: 4,
   });
 
   return (

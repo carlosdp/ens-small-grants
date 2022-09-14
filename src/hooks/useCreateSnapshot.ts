@@ -9,7 +9,7 @@ import { client, functionRequest } from '../supabase';
 const domain = {
   name: 'ENS Grants',
   version: '1',
-  chainId: 1,
+  chainId: 4,
 };
 
 const types = {
@@ -19,7 +19,7 @@ const types = {
   ],
 };
 
-const snapshotClient = new snapshot.Client712('https://hub.snapshot.org');
+const snapshotClient = new snapshot.Client712('https://testnet.snapshot.org');
 
 export type CreateSnapshotArgs = {
   roundId: number;
