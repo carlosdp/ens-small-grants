@@ -56,7 +56,7 @@ export function useRounds(selection?: string) {
         method: 'POST',
         body: JSON.stringify({
           query: QUERY,
-          variables: { spaceId: data[0].snapshot_space_id },
+          variables: { spaceId: data[selection ? Number(selection) - 1 : 0].snapshot_space_id },
         }),
         headers: {
           'content-type': 'application/json',
