@@ -105,6 +105,10 @@ function VoteInProgressSection({ round, snapshotProposalId, proposal }: VoteInPr
     }
   }, [vote, snapshotGrant, setOpenVoteModal]);
 
+  if (round.votingStart > new Date()) {
+    return <Typography>Voting has not started yet</Typography>;
+  }
+
   if (isLoading) {
     return <Spinner />;
   }
