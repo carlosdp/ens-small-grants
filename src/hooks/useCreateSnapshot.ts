@@ -94,7 +94,7 @@ export function useCreateSnapshot() {
               type: 'approval',
               title: round.title,
               body: `https://arweave.net/${transaction.id}`,
-              choices: grants.map((g, index) => `${index} - ${g.title}`),
+              choices: grants.map(g => `${g.id} - ${g.title}`),
               // todo(carlos): insert link to round
               discussion: '',
               start: Math.floor(new Date(round.voting_start).getTime() / 1000),
