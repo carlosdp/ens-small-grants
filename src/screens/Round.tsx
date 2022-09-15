@@ -1,5 +1,6 @@
 import { Helper, mq, Spinner, Typography } from '@ensdomains/thorin';
 import { formatEther } from 'ethers/lib/utils';
+import ReactMarkdown from 'react-markdown';
 import { useHref, useLinkClickHandler, useLocation, useParams } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
@@ -134,6 +135,30 @@ const VoteTimeTypography = styled(Typography)(
   `
 );
 
+const RoundDescription = styled(Typography)(
+  ({ theme }) => css`
+    grid-area: content;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    max-width: 80ch;
+    color: ${theme.colors.textSecondary};
+
+    gap: ${theme.space['4']};
+    margin-top: ${theme.space['8']};
+
+    a {
+      color: ${theme.colors.indigo};
+    }
+
+    ${mq.md.max(css`
+      margin-bottom: ${theme.space['4']};
+    `)}
+  `
+);
+
 export const Round = () => {
   const { id } = useParams<{ id: string }>();
   const { state } = useLocation();
@@ -228,6 +253,22 @@ export const Round = () => {
             <VoteTimeTypography>{lowerVoteMsg}</VoteTimeTypography>
           </VoteDetailsContainer>
         </HeadingContainer>
+        {round.description && (
+          <RoundDescription>
+            <ReactMarkdown
+              components={{
+                p: ({ children }) => <Typography as="p">{children}</Typography>,
+                a: ({ children, href: mdHref }) => (
+                  <a href={mdHref} target="_blank" rel="noreferrer">
+                    {children}
+                  </a>
+                ),
+              }}
+            >
+              {round.description}
+            </ReactMarkdown>
+          </RoundDescription>
+        )}
       </Container>
       {noSnapshotWhenNeeded ? (
         <BannerContainer>
