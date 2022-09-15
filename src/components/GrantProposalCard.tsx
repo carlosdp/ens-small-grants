@@ -116,6 +116,7 @@ function GrantProposalCard({
   selectedProps,
   setSelectedProps,
   votingStarted,
+  inProgress,
 }: GrantProposalCardProps) {
   const to = `/rounds/${roundId}/proposals/${proposal.id}`;
 
@@ -138,21 +139,23 @@ function GrantProposalCard({
       {votingStarted && (
         <Votes>
           <b>{voteCountFormatter.format(proposal.voteCount!)}</b>votes
-          <div>
-            <Checkbox
-              label=""
-              variant="regular"
-              onChange={e => {
-                // if target is checked, push the proposal id to the array
-                if (e.target.checked) {
-                  setSelectedProps([...selectedProps, proposal.snapshotId]);
-                } else {
-                  // if target is unchecked, remove the proposal id from the array
-                  setSelectedProps(selectedProps.filter(id => id !== proposal.snapshotId));
-                }
-              }}
-            />
-          </div>
+          {inProgress && (
+            <div>
+              <Checkbox
+                label=""
+                variant="regular"
+                onChange={e => {
+                  // if target is checked, push the proposal id to the array
+                  if (e.target.checked) {
+                    setSelectedProps([...selectedProps, proposal.snapshotId]);
+                  } else {
+                    // if target is unchecked, remove the proposal id from the array
+                    setSelectedProps(selectedProps.filter(id => id !== proposal.snapshotId));
+                  }
+                }}
+              />
+            </div>
+          )}
         </Votes>
       )}
     </StyledCard>
