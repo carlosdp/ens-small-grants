@@ -87,6 +87,7 @@ const ProfileWrapper = styled.div(
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
+    overflow: hidden;
 
     width: ${theme.space['44']};
     min-width: ${theme.space['44']};
