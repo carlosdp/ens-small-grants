@@ -65,7 +65,7 @@ const QUERY = `
     }
 `;
 
-const snapshotClient = new snapshot.Client712('https://testnet.snapshot.org');
+const snapshotClient = new snapshot.Client712('https://hub.snapshot.org');
 
 export function useSnapshotProposal(proposalId: string) {
   const queryClient = useQueryClient();
@@ -74,7 +74,7 @@ export function useSnapshotProposal(proposalId: string) {
   const { address } = useAccount();
 
   const { data: proposal, isLoading } = useQuery(['proposal', proposalId, address], async () => {
-    const res = await fetch('https://testnet.snapshot.org/graphql', {
+    const res = await fetch('https://hub.snapshot.org/graphql', {
       method: 'POST',
       body: JSON.stringify({
         query: QUERY,

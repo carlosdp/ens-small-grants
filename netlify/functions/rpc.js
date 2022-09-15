@@ -12,7 +12,7 @@ const corsHeaders = {
 const domain = {
   name: 'ENS Grants',
   version: '1',
-  chainId: 4,
+  chainId: 1,
 };
 
 const types = {

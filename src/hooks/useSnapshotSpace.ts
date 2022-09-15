@@ -37,7 +37,7 @@ export function useSnapshotSpace(spaceId: string) {
     (async () => {
       try {
         setLoading(true);
-        const res = await fetch('https://testnet.snapshot.org/grapqhl', {
+        const res = await fetch('https://hub.snapshot.org/grapqhl', {
           method: 'POST',
           body: JSON.stringify({ query: QUERY, variables: { spaceId } }),
           headers: {
