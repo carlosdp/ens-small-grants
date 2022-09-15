@@ -129,13 +129,13 @@ export function useSnapshotProposal(proposalId: string) {
   });
 
   const vote = useCallback(
-    async (choiceId: number) => {
+    async (choiceId: number[]) => {
       if (address && proposal?.space.id) {
         await snapshotClient.vote(signer as unknown as ethers.providers.Web3Provider, address, {
           space: proposal?.space.id,
           proposal: proposalId,
           type: 'approval',
-          choice: [choiceId + 1],
+          choice: choiceId,
         });
         queryClient.invalidateQueries(['proposal', proposalId, address]);
       }

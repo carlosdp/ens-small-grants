@@ -1,4 +1,4 @@
-import { mq, Typography } from '@ensdomains/thorin';
+import { Checkbox, mq, Typography } from '@ensdomains/thorin';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
@@ -10,11 +10,13 @@ import { cardStyles } from './atoms';
 export type GrantProposalCardProps = {
   roundId: string | number;
   proposal: Grant;
+  selectedProps: number[];
+  setSelectedProps: (selectedProps: number[]) => void;
   votingStarted: boolean;
   inProgress?: boolean;
 };
 
-const StyledCard = styled(Link)(
+const StyledCard = styled('div')(
   cardStyles,
   ({ theme }) => css`
     display: grid;
@@ -63,6 +65,9 @@ const Description = styled(Typography)(
 
 const Votes = styled(Typography)(
   ({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
     grid-area: votes;
     white-space: nowrap;
     color: ${theme.colors.textTertiary};
@@ -70,6 +75,7 @@ const Votes = styled(Typography)(
     text-align: right;
     b {
       color: ${theme.colors.text};
+      padding-right: ${theme.space['1']};
     }
   `
 );
@@ -104,24 +110,49 @@ const ContentWrapper = styled.div(
   `
 );
 
-function GrantProposalCard({ roundId, proposal, votingStarted }: GrantProposalCardProps) {
+function GrantProposalCard({
+  roundId,
+  proposal,
+  selectedProps,
+  setSelectedProps,
+  votingStarted,
+}: GrantProposalCardProps) {
   const to = `/rounds/${roundId}/proposals/${proposal.id}`;
 
   return (
-    <StyledCard to={to}>
+    <StyledCard>
       <ProfileWrapper>
-        <Profile
-          address={proposal.proposer}
-          subtitle={`${getTimeDifferenceString(proposal.createdAt, new Date())} ago`}
-        />
+        <Link to={to}>
+          <Profile
+            address={proposal.proposer}
+            subtitle={`${getTimeDifferenceString(proposal.createdAt, new Date())} ago`}
+          />
+        </Link>
       </ProfileWrapper>
-      <ContentWrapper>
-        <Title>{proposal.title}</Title>
-        <Description>{proposal.description}</Description>
-      </ContentWrapper>
+      <Link to={to}>
+        <ContentWrapper>
+          <Title>{proposal.title}</Title>
+          <Description>{proposal.description}</Description>
+        </ContentWrapper>
+      </Link>
       {votingStarted && (
         <Votes>
-          <b>{voteCountFormatter.format(proposal.voteCount!)}</b> votes
+          <b>{voteCountFormatter.format(proposal.voteCount!)}</b>votes
+          <div>
+            <Checkbox
+              label=""
+              variant="regular"
+              onChange={e => {
+                // if target is checked, push the proposal id to the array
+                if (e.target.checked) {
+                  setSelectedProps([...selectedProps, proposal.snapshotId]);
+                } else {
+                  // if target is unchecked, remove the proposal id from the array
+                  setSelectedProps(selectedProps.filter(id => id !== proposal.snapshotId));
+                }
+              }}
+            />
+          </div>
         </Votes>
       )}
     </StyledCard>
