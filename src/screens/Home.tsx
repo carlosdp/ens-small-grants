@@ -126,7 +126,8 @@ function Home() {
       <HeadingContainer>
         <Heading>Small Grants from ENS DAO</Heading>
         <Subheading>
-          ENS DAO Small Grants allow $ENS holders to vote on projects to receive funding. Sponsored by the Public Goods and Ecosystem working group, these recurring small grants award 1Ξ to your favorite projects.{' '}
+          ENS DAO Small Grants allow $ENS holders to vote on projects to receive funding. Sponsored by the Public Goods
+          and Ecosystem working group, these recurring small grants award 1Ξ to your favorite projects.{' '}
         </Subheading>
       </HeadingContainer>
       <RoundItemsOuter>
