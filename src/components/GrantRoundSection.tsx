@@ -1,11 +1,11 @@
 import { Button, Spinner, Typography } from '@ensdomains/thorin';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useAccount } from 'wagmi';
 
 import { useGrants } from '../hooks';
-import type { ClickHandler, Round } from '../types';
+import type { ClickHandler, Grant, Round } from '../types';
 import { BannerContainer } from './BannerContainer';
 import GrantProposalCard from './GrantProposalCard';
 import VoteModal from './VoteModal';
@@ -38,12 +38,18 @@ function GrantRoundSection({
 }: GrantRoundSectionProps) {
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
+  const [grants, setGrants] = useState<Grant[]>([]);
   const { grants: _grants, isLoading } = useGrants(round);
-  const grants = useMemo(() => {
-    if (!_grants || !randomiseGrants) return _grants;
-    return _grants.sort(() => 0.5 - Math.random());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [round]);
+  const [isShuffled, setIsShuffled] = useState<number>(0);
+
+  useEffect(() => {
+    if (isShuffled < 1 && _grants && randomiseGrants) {
+      setIsShuffled(isShuffled + 1);
+      setGrants(_grants?.sort(() => Math.random() - 0.5));
+    } else {
+      setGrants(_grants || []);
+    }
+  }, [_grants, isShuffled, randomiseGrants]);
 
   // Keep track of the selected prop ids for approval voting
   const [selectedProps, setSelectedProps] = useState<number[]>([]);
