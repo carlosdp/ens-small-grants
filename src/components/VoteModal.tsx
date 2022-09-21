@@ -72,12 +72,17 @@ function VoteModal({ open, onClose, grantIds, proposalId, address }: VoteModalPr
           </Helper>
         ) : null}
         <Message>
-          {voted
-            ? 'If you wish to edit your vote, you can do so by refreshing this page. A new vote will override your previous vote.'
-            : `You are about to vote for ${
-                grantIds.length > 1 ? 'these proposals' : 'this proposal'
-              }, please confirm the
-          details below.`}
+          {voted ? (
+            <>
+              <Typography>
+                <b>The vote count may take a few minutes to update.</b>
+              </Typography>
+              <Typography>Voting again will override your previous vote.</Typography>
+            </>
+          ) : (
+            `You are about to vote for ${grantIds.length > 1 ? 'these proposals' : 'this proposal'}, please confirm the
+          details below.`
+          )}
         </Message>
         <DisplayItems>
           <DisplayItem label="Connected address" address value={address} />
