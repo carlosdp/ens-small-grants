@@ -38,16 +38,17 @@ function GrantRoundSection({
 }: GrantRoundSectionProps) {
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
-  const [grants, setGrants] = useState<Grant[]>([]);
   const { grants: _grants, isLoading } = useGrants(round);
+  const [grants, setGrants] = useState<Grant[]>(_grants || []);
   const [isShuffled, setIsShuffled] = useState<number>(0);
 
   useEffect(() => {
-    if (isShuffled < 1 && _grants && randomiseGrants) {
+    // Only run once, after grants are loaded
+    if (_grants && isShuffled === 0) {
+      if (randomiseGrants) {
+        setGrants(_grants.sort(() => Math.random() - 0.5));
+      }
       setIsShuffled(isShuffled + 1);
-      setGrants(_grants?.sort(() => Math.random() - 0.5));
-    } else {
-      setGrants(_grants || []);
     }
   }, [_grants, isShuffled, randomiseGrants]);
 
@@ -87,7 +88,7 @@ function GrantRoundSection({
           Connect wallet to vote
         </Button>
       )}
-      {address && selectedProps.length === 0 && (
+      {address && randomiseGrants && selectedProps.length === 0 && (
         <Button variant="secondary">Check the grants you'd like to vote for</Button>
       )}
       {address && selectedProps.length > 0 && (
