@@ -150,6 +150,12 @@ export function CreateProposal() {
     return <Navigate to="/" />;
   }
 
+  // Redirect to round page if it is not accepting proposals
+  const isPropRound = round.proposalStart < new Date() && round.proposalEnd > new Date();
+  if (!isPropRound) {
+    return <Navigate to={to} />;
+  }
+
   return (
     <>
       <Dialog open={dialogOpen} onDismiss={() => setDialogOpen(false)} variant="blank">
