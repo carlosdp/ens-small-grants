@@ -1,4 +1,5 @@
 import { Button, Spinner, Typography } from '@ensdomains/thorin';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useMemo, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useAccount } from 'wagmi';
@@ -36,6 +37,7 @@ function GrantRoundSection({
   ...round
 }: GrantRoundSectionProps) {
   const { address } = useAccount();
+  const { openConnectModal } = useConnectModal();
   const { grants: _grants, isLoading } = useGrants(round);
   const grants = useMemo(() => {
     if (!_grants || !randomiseGrants) return _grants;
@@ -74,7 +76,15 @@ function GrantRoundSection({
           Submit Proposal
         </Button>
       )}
-      {selectedProps.length > 0 && (
+      {!address && randomiseGrants && (
+        <Button variant="secondary" onClick={openConnectModal}>
+          Connect wallet to vote
+        </Button>
+      )}
+      {address && selectedProps.length === 0 && (
+        <Button variant="secondary">Check the grants you'd like to vote for</Button>
+      )}
+      {address && selectedProps.length > 0 && (
         <Button onClick={() => setVotingModalOpen(true)}>
           Vote for {selectedProps.length} proposal{selectedProps.length > 1 && 's'}
         </Button>
