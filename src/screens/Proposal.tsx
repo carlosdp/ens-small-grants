@@ -173,8 +173,8 @@ function Proposal() {
         </MarkdownWrapper>
         {!grandIdsLoading && (
           <ProposalNavigator>
-            <BackButton to={`/rounds/${round.id}/proposals/${previousGrantId}`} text="Previous" />
-            <BackButton to={`/rounds/${round.id}/proposals/${nextGrantId}`} text="Next" reverse />
+            {previousGrantId && <BackButton to={`/rounds/${round.id}/proposals/${previousGrantId}`} text="Previous" />}
+            {nextGrantId && <BackButton to={`/rounds/${round.id}/proposals/${nextGrantId}`} text="Next" reverse />}
           </ProposalNavigator>
         )}
       </ContentGrid>
