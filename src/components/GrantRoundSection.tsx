@@ -178,7 +178,15 @@ function GrantRoundSection({
             votingStarted={round.votingStart < new Date()}
             inProgress={round.votingEnd > new Date()}
             key={g.id}
-            highlighted={selectedProps && selectedProps.votes.includes(g.snapshotId)}
+            highlighted={
+              // In the voting stage, highlight the selected grants
+              // In the completed stage, highlight the winning grants
+              randomiseGrants
+                ? selectedProps && selectedProps.votes.includes(g.snapshotId)
+                : round.votingStart < new Date()
+                ? grants.findIndex(grant => grant.id === g.id) < 5
+                : false
+            }
           />
         ))}
 
