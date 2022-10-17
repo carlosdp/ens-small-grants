@@ -22,10 +22,11 @@ const StyledCard = styled('div')(
   cardStyles,
   ({ theme }) => css`
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     grid-template-areas:
-      'profile votes'
-      'content content';
+      'profile'
+      'content'
+      'votes';
     gap: ${theme.space['4']};
     border: 1px solid ${theme.colors.borderSecondary};
     width: 100%;
@@ -38,6 +39,13 @@ const StyledCard = styled('div')(
     &.selected {
       border: ${theme.borderWidths['0.5']} solid ${theme.colors.blue};
     }
+
+    ${mq.xs.min(css`
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        'profile votes'
+        'content content';
+    `)}
 
     ${mq.md.min(css`
       grid-template-areas: 'profile content votes';
@@ -81,6 +89,12 @@ const Votes = styled(Typography)(
       color: ${theme.colors.text};
       padding-right: ${theme.space['1']};
     }
+
+    ${mq.xs.max(css`
+      justify-content: flex-start;
+      padding-top: ${theme.space['2']};
+      border-top: ${theme.borderWidths['0.5']} solid ${theme.colors.borderTertiary};
+    `)}
   `
 );
 
@@ -137,12 +151,12 @@ function GrantProposalCard({
           />
         </Link>
       </ProfileWrapper>
-      <Link to={to}>
-        <ContentWrapper>
+      <ContentWrapper>
+        <Link to={to}>
           <Title>{proposal.title}</Title>
           <Description>{proposal.description}</Description>
-        </ContentWrapper>
-      </Link>
+        </Link>
+      </ContentWrapper>
       {votingStarted && (
         <Votes>
           <b>{voteCountFormatter.format(proposal.voteCount!)}</b>votes
