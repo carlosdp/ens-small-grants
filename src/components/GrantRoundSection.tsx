@@ -23,6 +23,14 @@ const GrantsContainer = styled.div(
   `
 );
 
+const FilterButton = styled(Button)(
+  ({ theme }) => css`
+    align-self: flex-start;
+    width: fit-content;
+    padding: ${theme.space['2']} ${theme.space['4']};
+  `
+);
+
 export type GrantRoundSectionProps = Round & {
   isPropsOpen?: boolean;
   randomiseGrants?: boolean;
@@ -40,6 +48,7 @@ function GrantRoundSection({
   const { address } = useAccount();
   const { getItem, setItem } = useStorage();
   const { openConnectModal } = useConnectModal();
+  const [filter, setFilter] = useState<'random' | 'votes' | null>(null);
   const [grants, setGrants] = useState<Grant[]>([]);
   const { grants: _grants, isLoading } = useGrants(round);
 
@@ -71,6 +80,20 @@ function GrantRoundSection({
       }
     }
   }, [_grants, getItem, grants, randomiseGrants, round.id, setItem]);
+
+  // Handle filter
+  useEffect(() => {
+    if (_grants && filter) {
+      if (filter === 'votes') {
+        setGrants(_grants);
+      } else {
+        const shuffledGrants = _grants.sort(() => 0.5 - Math.random());
+        setItem(`round-${round.id}-grants`, JSON.stringify(shuffledGrants), 'session');
+        setGrants(shuffledGrants);
+        setFilter(null);
+      }
+    }
+  }, [_grants, filter, grants, round.id, setItem]);
 
   // Keep track of the selected prop ids for approval voting
   const [selectedProps, setSelectedProps] = useState<SelectedPropVotes>();
@@ -113,6 +136,20 @@ function GrantRoundSection({
 
   return (
     <GrantsContainer>
+      {randomiseGrants && (
+        <FilterButton
+          tone="blue"
+          variant="secondary"
+          size="extraSmall"
+          shadowless={true}
+          suffix={<b>↓</b>}
+          onClick={() => {
+            setFilter(filter !== 'votes' ? 'votes' : 'random');
+          }}
+        >
+          {filter !== 'votes' ? 'Sort by votes' : 'Shuffle order'}
+        </FilterButton>
+      )}
       {isPropsOpen && (
         <Button as="a" href={createProposalHref} onClick={createProposalClick}>
           Submit Proposal
