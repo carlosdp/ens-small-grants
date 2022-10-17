@@ -15,6 +15,7 @@ export type GrantProposalCardProps = {
   setSelectedProps: (props: SelectedPropVotes) => void;
   votingStarted: boolean;
   inProgress?: boolean;
+  highlighted?: boolean;
 };
 
 const StyledCard = styled('div')(
@@ -34,9 +35,13 @@ const StyledCard = styled('div')(
       background-color: ${theme.colors.backgroundTertiary};
     }
 
+    &.selected {
+      border: ${theme.borderWidths['0.5']} solid ${theme.colors.blue};
+    }
+
     ${mq.md.min(css`
       grid-template-areas: 'profile content votes';
-      grid-template-columns: ${theme.space['44']} 1fr min-content;
+      grid-template-columns: ${theme.space['52']} 1fr min-content;
     `)}
   `
 );
@@ -88,8 +93,8 @@ const ProfileWrapper = styled.div(
     justify-content: flex-start;
     overflow: hidden;
 
-    width: ${theme.space['44']};
-    min-width: ${theme.space['44']};
+    width: ${theme.space['52']};
+    min-width: ${theme.space['52']};
     padding: ${theme.space['2']};
     border-radius: ${theme.radii.large};
 
@@ -117,12 +122,13 @@ function GrantProposalCard({
   setSelectedProps,
   votingStarted,
   inProgress,
+  highlighted,
 }: GrantProposalCardProps) {
   const { address } = useAccount();
   const to = `/rounds/${roundId}/proposals/${proposal.id}`;
 
   return (
-    <StyledCard>
+    <StyledCard className={highlighted ? 'selected' : ''}>
       <ProfileWrapper>
         <Link to={to}>
           <Profile

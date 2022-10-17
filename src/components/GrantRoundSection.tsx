@@ -126,7 +126,7 @@ function GrantRoundSection({
       {address && randomiseGrants && selectedProps && selectedProps.votes.length === 0 && (
         <Button variant="secondary">Check the grants you'd like to vote for</Button>
       )}
-      {address && selectedProps && selectedProps.votes.length > 0 && (
+      {address && randomiseGrants && selectedProps && selectedProps.votes.length > 0 && (
         <Button onClick={() => setVotingModalOpen(true)}>
           Vote for {selectedProps.votes.length} proposal{selectedProps.votes.length > 1 && 's'}
         </Button>
@@ -141,6 +141,7 @@ function GrantRoundSection({
             votingStarted={round.votingStart < new Date()}
             inProgress={round.votingEnd > new Date()}
             key={g.id}
+            highlighted={selectedProps && selectedProps.votes.includes(g.snapshotId)}
           />
         ))}
 
