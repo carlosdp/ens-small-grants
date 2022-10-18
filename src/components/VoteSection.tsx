@@ -1,11 +1,14 @@
-import { mq, Spinner, Typography } from '@ensdomains/thorin';
-import { useMemo } from 'react';
+import { Button, Checkbox, mq, Spinner, Typography } from '@ensdomains/thorin';
+import { useEffect, useMemo, useState } from 'react';
 import styled, { css } from 'styled-components';
+import { useAccount } from 'wagmi';
 
+import { useStorage } from '../hooks';
 import { useSnapshotProposal } from '../hooks';
-import type { Grant, Round } from '../types';
+import type { Grant, Round, SelectedPropVotes } from '../types';
 import { voteCountFormatter } from '../utils';
 import Profile from './Profile';
+import VoteModal from './VoteModal';
 import { Card, TextWithHighlight } from './atoms';
 
 export function clipAddress(address: string) {
@@ -26,6 +29,7 @@ export type VoteInProgressSectionProps = {
 
 const VotesTypography = styled(TextWithHighlight)(
   ({ theme }) => css`
+    width: 100%;
     font-size: ${theme.fontSizes.extraLarge};
   `
 );
@@ -86,11 +90,31 @@ const VoterAmountTypography = styled(Typography)<{ $voteCount: number }>(
 );
 
 function VoteInProgressSection({ round, snapshotProposalId, proposal }: VoteInProgressSectionProps) {
+  const { address } = useAccount();
   const { proposal: snapshotProposal, isLoading } = useSnapshotProposal(snapshotProposalId);
   const snapshotGrant = useMemo(
     () => snapshotProposal?.grants.find(g => g.grantId === proposal.id),
     [snapshotProposal, proposal.id]
   );
+
+  const { getItem, setItem } = useStorage();
+  const [votingModalOpen, setVotingModalOpen] = useState<boolean>(false);
+  const [selectedProps, setSelectedProps] = useState<SelectedPropVotes>(
+    getItem(`round-${round.id}-votes`, 'local')
+      ? JSON.parse(getItem(`round-${round.id}-votes`, 'local'))
+      : {
+          round: round.id,
+          votes: [],
+        }
+  );
+
+  // Save selected props to local storage
+  useEffect(() => {
+    if (round.id && selectedProps) {
+      setItem(`round-${round.id}-votes`, JSON.stringify(selectedProps), 'local');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [round.id, selectedProps]);
 
   if (round.votingStart > new Date()) {
     return <Typography>Voting has not started yet</Typography>;
@@ -117,7 +141,38 @@ function VoteInProgressSection({ round, snapshotProposalId, proposal }: VoteInPr
           <VotesTypography>
             <b>{voteCountFormatter.format(snapshotGrant.voteCount)}</b> Votes
           </VotesTypography>
+          {address && (
+            <Checkbox
+              label=""
+              variant="regular"
+              checked={selectedProps.votes.includes(proposal.snapshotId)}
+              onChange={e => {
+                // if target is checked, push the proposal id to the array
+                if (e.target.checked) {
+                  setSelectedProps({
+                    round: Number(round.id),
+                    votes: [...(selectedProps.votes || []), proposal.snapshotId],
+                  });
+                } else {
+                  // if target is unchecked, remove the proposal id from the array
+                  setSelectedProps({
+                    round: Number(round.id),
+                    votes: (selectedProps.votes || []).filter(vote => vote !== proposal.snapshotId),
+                  });
+                }
+              }}
+            />
+          )}
         </TopSection>
+        {address && selectedProps.votes.length > 0 && (
+          <Button
+            variant={selectedProps.votes.includes(proposal.snapshotId) ? 'primary' : 'secondary'}
+            size="small"
+            onClick={() => setVotingModalOpen(true)}
+          >
+            Vote for {selectedProps.votes.length} proposal{selectedProps.votes.length > 1 && 's'}
+          </Button>
+        )}
         {snapshotGrant.voteSamples.slice(0, 4).map(voter => (
           <Profile address={voter.voter} subtitle={`${voteCountFormatter.format(voter.vp)} votes`} key={voter.voter} />
         ))}
@@ -127,6 +182,16 @@ function VoteInProgressSection({ round, snapshotProposalId, proposal }: VoteInPr
           </ExtraVotersContainer>
         )}
       </Container>
+
+      {address && round.snapshot?.id && (
+        <VoteModal
+          open={votingModalOpen}
+          onClose={() => setVotingModalOpen(false)}
+          proposalId={round.snapshot.id}
+          grantIds={selectedProps?.votes.map(id => id + 1) || []}
+          address={address}
+        />
+      )}
     </>
   );
 }
