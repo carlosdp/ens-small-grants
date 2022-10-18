@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useAccount } from 'wagmi';
 
-import { useGrants } from '../hooks';
-import useStorage from '../hooks/useLocalStorage';
+import { useGrants, useStorage } from '../hooks';
 import type { ClickHandler, Grant, Round, SelectedPropVotes } from '../types';
 import { BannerContainer } from './BannerContainer';
 import GrantProposalCard from './GrantProposalCard';
