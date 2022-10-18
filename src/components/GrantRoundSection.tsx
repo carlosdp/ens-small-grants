@@ -95,22 +95,21 @@ function GrantRoundSection({
   }, [_grants, filter, grants, round.id, setItem]);
 
   // Keep track of the selected prop ids for approval voting
-  const [selectedProps, setSelectedProps] = useState<SelectedPropVotes>();
+  const [selectedProps, setSelectedProps] = useState<SelectedPropVotes>(
+    getItem(`round-${round.id}-votes`, 'local')
+      ? JSON.parse(getItem(`round-${round.id}-votes`, 'local'))
+      : {
+          round: round.id,
+          votes: [],
+        }
+  );
   const [votingModalOpen, setVotingModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!selectedProps && localStorage.getItem(`round-${round.id}-votes`)) {
-      setSelectedProps(JSON.parse(localStorage.getItem(`round-${round.id}-votes`) || ''));
-    } else if (!selectedProps) {
-      setSelectedProps({
-        round: round.id,
-        votes: [],
-      });
-    }
-
     if (selectedProps) {
-      localStorage.setItem(`round-${round.id}-votes`, JSON.stringify(selectedProps));
+      setItem(`round-${round.id}-votes`, JSON.stringify(selectedProps), 'local');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedProps, round]);
 
   if (isLoading || (_grants && _grants.length > grants.length)) {
