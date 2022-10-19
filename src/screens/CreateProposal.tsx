@@ -15,6 +15,7 @@ type FormInput = {
   title: string;
   shortDescription: string;
   fullText: string;
+  twitter: string;
 };
 
 const Container = styled(Card)(
@@ -113,6 +114,7 @@ export function CreateProposal() {
     title: '',
     shortDescription: '',
     fullText: '',
+    twitter: '',
   });
 
   const isFormDisabled = !address;
@@ -133,6 +135,7 @@ export function CreateProposal() {
         title: dialogData.title,
         description: dialogData.shortDescription,
         fullText: dialogData.fullText,
+        twitter: dialogData.twitter,
       });
 
       navigate(to, { state: { submission: true } });
@@ -172,6 +175,7 @@ export function CreateProposal() {
           </DialogDescription>
           <DisplayItems>
             <DisplayItem label="Title" value={dialogData.title} />
+            <DisplayItem label="Twitter" value={dialogData.twitter} />
             <DisplayItem label="TL;DR" value={dialogData.shortDescription} />
             <DisplayItem label="Description" value={`${dialogData.fullText.slice(0, 30).trim()}...`} />
           </DisplayItems>
@@ -214,6 +218,20 @@ export function CreateProposal() {
               required
               placeholder="ENS Spaceship"
               {...register('title', { required: true })}
+            />
+            <Input
+              label="Twitter"
+              showDot
+              id="twitter"
+              description={
+                <InputDescription>
+                  The best Twitter account to reach you at in case you win. This will not be public
+                </InputDescription>
+              }
+              validated={getFieldState('twitter', formState).isDirty}
+              required
+              placeholder="ens_dao"
+              {...register('twitter', { required: true })}
             />
             <Input
               label="TL;DR"
