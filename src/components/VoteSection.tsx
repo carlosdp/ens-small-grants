@@ -1,11 +1,11 @@
-import { Button, Checkbox, mq, Spinner, Typography } from '@ensdomains/thorin';
+import { Button, Checkbox, Dialog, mq, Spinner, Typography } from '@ensdomains/thorin';
 import { useEffect, useMemo, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useAccount } from 'wagmi';
 
 import { useStorage } from '../hooks';
 import { useSnapshotProposal } from '../hooks';
-import type { Grant, Round, SelectedPropVotes } from '../types';
+import type { Grant, Round, SelectedPropVotes, SnapshotVote } from '../types';
 import { voteCountFormatter } from '../utils';
 import Profile from './Profile';
 import VoteModal from './VoteModal';
@@ -43,7 +43,7 @@ const Container = styled.div(
     gap: ${theme.space['3']};
     width: 100%;
 
-    .profile:nth-child(n + 4) {
+    .profile:nth-child(n + 5) {
       display: none;
       ${mq.md.min(css`
         display: flex;
@@ -75,15 +75,21 @@ const ExtraVotersContainer = styled.div(
 
     height: ${theme.space['10']};
     width: 100%;
+    transition: all 0.1s ease-in-out;
+
+    &:hover {
+      cursor: pointer;
+      background-color: #e6e6ec;
+    }
   `
 );
 
 const VoterAmountTypography = styled(Typography)<{ $voteCount: number }>(
   ({ $voteCount }) => css`
     &::before {
-      content: '+ ${$voteCount - 2} ';
+      content: '+ ${$voteCount - 3} ';
       ${mq.md.min(css`
-        content: '+ ${$voteCount - 4} ';
+        content: '+ ${$voteCount - 5} ';
       `)}
     }
   `
@@ -98,6 +104,7 @@ function VoteInProgressSection({ round, snapshotProposalId, proposal }: VoteInPr
   );
 
   const { getItem, setItem } = useStorage();
+  const [votersModalOpen, setVotersModalOpen] = useState<boolean>(false);
   const [votingModalOpen, setVotingModalOpen] = useState<boolean>(false);
   const [selectedProps, setSelectedProps] = useState<SelectedPropVotes>(
     getItem(`round-${round.id}-votes`, 'local')
@@ -129,6 +136,7 @@ function VoteInProgressSection({ round, snapshotProposalId, proposal }: VoteInPr
   }
 
   const preVoting = new Date() < round.votingStart;
+  const votingOver = round.votingEnd < new Date();
 
   if (preVoting) {
     return <Typography>Voting has not started</Typography>;
@@ -141,7 +149,7 @@ function VoteInProgressSection({ round, snapshotProposalId, proposal }: VoteInPr
           <VotesTypography>
             <b>{voteCountFormatter.format(snapshotGrant.voteCount)}</b> Votes
           </VotesTypography>
-          {address && (
+          {!votingOver && address && (
             <Checkbox
               label=""
               variant="regular"
@@ -173,15 +181,17 @@ function VoteInProgressSection({ round, snapshotProposalId, proposal }: VoteInPr
             Vote for {selectedProps.votes.length} proposal{selectedProps.votes.length > 1 && 's'}
           </Button>
         )}
-        {snapshotGrant.voteSamples.slice(0, 4).map(voter => (
+        {snapshotGrant.voteSamples.slice(0, 5).map(voter => (
           <Profile address={voter.voter} subtitle={`${voteCountFormatter.format(voter.vp)} votes`} key={voter.voter} />
         ))}
-        {snapshotGrant.voteSamples.length > 4 && (
-          <ExtraVotersContainer>
+        {snapshotGrant.voteSamples.length > 5 && (
+          <ExtraVotersContainer onClick={() => setVotersModalOpen(true)}>
             <VoterAmountTypography $voteCount={snapshotGrant.voteSamples.length}>others</VoterAmountTypography>
           </ExtraVotersContainer>
         )}
       </Container>
+
+      <VotersModal isOpen={votersModalOpen} setIsOpen={setVotersModalOpen} voters={snapshotGrant.voteSamples} />
 
       {address && round.snapshot?.id && (
         <VoteModal
@@ -212,6 +222,38 @@ function VoteSection({ round, proposal }: GrantProposalCardProps) {
   );
 
   return <StyledCard>{innerContent}</StyledCard>;
+}
+
+const VotersModalContent = styled.div(
+  ({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    gap: ${theme.space['4']};
+    width: 100%;
+    max-height: 70vh;
+    overflow: scroll;
+    align-items: flex-start;
+  `
+);
+
+function VotersModal({
+  isOpen,
+  setIsOpen,
+  voters,
+}: {
+  isOpen: boolean;
+  setIsOpen: (props: boolean) => void;
+  voters: SnapshotVote[];
+}) {
+  return (
+    <Dialog open={isOpen} variant="blank" onDismiss={() => setIsOpen(false)}>
+      <VotersModalContent>
+        {voters.map(voter => (
+          <Profile address={voter.voter} subtitle={`${voteCountFormatter.format(voter.vp)} votes`} key={voter.voter} />
+        ))}
+      </VotersModalContent>
+    </Dialog>
+  );
 }
 
 export default VoteSection;
