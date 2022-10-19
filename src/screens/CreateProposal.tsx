@@ -38,6 +38,10 @@ const Container = styled(Card)(
     fieldset legend {
       margin-top: ${theme.space['2']};
     }
+
+    fieldset > div:last-child {
+      gap: 2.5rem;
+    }
   `
 );
 
@@ -77,6 +81,7 @@ const Title = styled(Typography)(
 
 const InputDescription = styled.div(
   ({ theme }) => css`
+    line-height: 1.2;
     font-weight: ${theme.fontWeights.medium};
     color: ${theme.colors.textTertiary};
   `
