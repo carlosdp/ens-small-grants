@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import BasicLayout from './layouts/BasicLayout';
 import { CreateProposal } from './screens/CreateProposal';
 import { CreateSnapshot } from './screens/CreateSnapshot';
-import Faq from './screens/FAQ';
+import Faq from './screens/Faq';
 import Home from './screens/Home';
 import Proposal from './screens/Proposal';
 import { Round } from './screens/Round';
