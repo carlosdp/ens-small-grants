@@ -15,6 +15,7 @@ type FormInput = {
   title: string;
   shortDescription: string;
   fullText: string;
+  twitter: string;
 };
 
 const Container = styled(Card)(
@@ -37,6 +38,10 @@ const Container = styled(Card)(
 
     fieldset legend {
       margin-top: ${theme.space['2']};
+    }
+
+    fieldset > div:last-child {
+      gap: 2.5rem;
     }
   `
 );
@@ -77,6 +82,7 @@ const Title = styled(Typography)(
 
 const InputDescription = styled.div(
   ({ theme }) => css`
+    line-height: 1.2;
     font-weight: ${theme.fontWeights.medium};
     color: ${theme.colors.textTertiary};
   `
@@ -108,6 +114,7 @@ export function CreateProposal() {
     title: '',
     shortDescription: '',
     fullText: '',
+    twitter: '',
   });
 
   const isFormDisabled = !address;
@@ -128,6 +135,7 @@ export function CreateProposal() {
         title: dialogData.title,
         description: dialogData.shortDescription,
         fullText: dialogData.fullText,
+        twitter: dialogData.twitter,
       });
 
       navigate(to, { state: { submission: true } });
@@ -136,7 +144,9 @@ export function CreateProposal() {
       mutationKey: ['createGrant', roundId, dialogData],
     }
   );
-  const publishError = (error as Error | undefined)?.message;
+  const _publishError = error as Error | undefined;
+  const publishError =
+    _publishError && (typeof _publishError?.message === 'string' ? _publishError?.message : 'Error signing message');
 
   const onCancel = useCallback(() => {
     navigate(to);
@@ -160,13 +170,14 @@ export function CreateProposal() {
     <>
       <Dialog open={dialogOpen} onDismiss={() => setDialogOpen(false)} variant="blank">
         <Dialog.Heading title="Confirm your proposal" />
-        {publishError && <Helper type="error">{publishError}</Helper>}
+        {publishError && <Helper type="error">{publishError.toString()}</Helper>}
         <InnerModal>
           <DialogDescription>
             Make sure everything is correct, proposal submissions are public and can't be undone.
           </DialogDescription>
           <DisplayItems>
             <DisplayItem label="Title" value={dialogData.title} />
+            <DisplayItem label="Twitter" value={dialogData.twitter} />
             <DisplayItem label="TL;DR" value={dialogData.shortDescription} />
             <DisplayItem label="Description" value={`${dialogData.fullText.slice(0, 30).trim()}...`} />
           </DisplayItems>
@@ -209,6 +220,20 @@ export function CreateProposal() {
               required
               placeholder="ENS Spaceship"
               {...register('title', { required: true })}
+            />
+            <Input
+              label="Twitter"
+              showDot
+              id="twitter"
+              description={
+                <InputDescription>
+                  The best Twitter account to reach you at in case you win. This will not be public
+                </InputDescription>
+              }
+              validated={getFieldState('twitter', formState).isDirty}
+              required
+              placeholder="ens_dao"
+              {...register('twitter', { required: true })}
             />
             <Input
               label="TL;DR"

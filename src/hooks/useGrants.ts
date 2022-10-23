@@ -35,10 +35,12 @@ export function useGrants(round: Round | undefined, selection?: string) {
       return data
         .map(g => {
           let snapshotId = round!.snapshot?.choices.findIndex(c => Number.parseInt(c.split(' - ')[0]) === g.id);
+          const _score = round!.snapshot?.scores[snapshotId!];
+          const score = !_score || _score === undefined ? 0 : _score;
 
           return {
             ...replaceKeysWithFunc(g, camelCaseToUpperCase),
-            voteCount: round!.snapshot?.scores[snapshotId!],
+            voteCount: score,
             snapshotId: snapshotId && (snapshotId++ ?? 0),
           };
         })
