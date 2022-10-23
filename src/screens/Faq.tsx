@@ -1,4 +1,5 @@
 import { mq, Heading, Typography } from '@ensdomains/thorin';
+import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import styled, { css } from 'styled-components';
 
 import { cardStyles } from '../components/atoms';
@@ -151,28 +152,13 @@ const content: Content[] = [
     content: [
       {
         question: 'What if I submitted to the wrong round?',
-        answer: (
-          <p>
-            Please get in touch with{' '}
-            <a href="https://twitter.com/Coltron_eth" target="_blank" rel="noreferrer">
-              coltron.eth
-            </a>
-            . Administrators can move your proposal before voting is submitted to snapshot.
-          </p>
-        ),
+        answer:
+          'Please get in touch with [coltron.eth](https://twitter.com/Coltron_eth). Administrators can move your proposal before voting is submitted to snapshot.',
       },
       {
         question: 'Is there a proposal template?',
-        answer: (
-          <p>
-            There is no required template. We encourage creativity. Consider the use of markdown to craft a
-            well-organized proposal.{' '}
-            <a href="https://www.markdownguide.org/basic-syntax/" target="_blank" rel="noreferrer">
-              A short guide can be found here
-            </a>
-            .
-          </p>
-        ),
+        answer:
+          'There is no required template. We encourage creativity. Consider the use of markdown to craft a well-organized proposal. [A short guide can be found here](https://www.markdownguide.org/basic-syntax/).',
       },
       {
         question: 'How do I receive winnings?',
@@ -193,19 +179,8 @@ const content: Content[] = [
     content: [
       {
         question: 'I’m having an issue. Who do I contact?',
-        answer: (
-          <p>
-            Please get in touch with{' '}
-            <a href="https://twitter.com/Coltron_eth" target="_blank" rel="noreferrer">
-              coltron.eth
-            </a>
-            ,{' '}
-            <a href="https://twitter.com/gregskril" target="_blank" rel="noreferrer">
-              gregskril.eth
-            </a>{' '}
-            or a DAO steward.
-          </p>
-        ),
+        answer:
+          'Please get in touch with [coltron.eth](https://twitter.com/Coltron_eth), [gregskril.eth](https://twitter.com/gregskril) or a DAO steward.',
       },
     ],
   },
@@ -227,7 +202,23 @@ export default function Faq() {
                 <summary>
                   <Question as="span">{faq.question}</Question>
                 </summary>
-                <Answer as={typeof faq.answer === 'string' ? 'p' : 'div'}>{faq.answer}</Answer>
+                <Answer as="div">
+                  {typeof faq.answer === 'string' ? (
+                    <ReactMarkdown
+                      components={{
+                        a: ({ children, href }) => (
+                          <a href={href} target="_blank" rel="noreferrer">
+                            {children}
+                          </a>
+                        ),
+                      }}
+                    >
+                      {faq.answer}
+                    </ReactMarkdown>
+                  ) : (
+                    faq.answer
+                  )}
+                </Answer>
               </StyledFaq>
             ))}
           </div>
