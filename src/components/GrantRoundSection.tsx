@@ -182,7 +182,7 @@ function GrantRoundSection({
               randomiseGrants
                 ? selectedProps && selectedProps.votes.includes(g.snapshotId)
                 : round.votingStart < new Date()
-                ? grants.findIndex(grant => grant.id === g.id) < 5
+                ? grants.findIndex(grant => grant.id === g.id) < round.maxWinnerCount
                 : false
             }
           />
