@@ -82,7 +82,7 @@ const NavButtons = styled.nav(
       }
     }
 
-    gap: ${theme.space['2']};
+    gap: ${theme.space['4']};
 
     ${mq.md.min(css`
       justify-content: center;
@@ -102,6 +102,7 @@ const Header = () => {
         </Title>
       </LogoAndText>
       <NavButtons>
+        <Link to="/faq">FAQ</Link>
         <ConnectButton chainStatus="none" showBalance={false} />
       </NavButtons>
     </HeaderContainer>
